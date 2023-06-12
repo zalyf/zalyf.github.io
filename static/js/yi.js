@@ -88,8 +88,7 @@ function zhanbu(){
     }
     var sxia=yaoxia.join("");
     var sshang=yaoshang.join("");
-    window.alert(sxia);
-    window.alert(sshang);
+
     var xiagua = parseInt(sxia,2);
     var shanggua = parseInt(sshang,2);
 
@@ -100,14 +99,16 @@ function zhanbu(){
         var codenum = parseInt(code);
         if(finalgua == codenum)
         {
-             window.alert(zy64guaData[i]['name'])
-             window.alert(zy64guaData[i]['desc'])
-             window.alert(zy64guaData[i].rows[0])
-             window.alert(zy64guaData[i].rows[1])
-             window.alert(zy64guaData[i].rows[2])
-             window.alert(zy64guaData[i].rows[3])
-             window.alert(zy64guaData[i].rows[4])
-             window.alert(zy64guaData[i].rows[5])
+             window.alert(zy64guaData[i]['name']);
+             window.alert(zy64guaData[i]['desc']);
+             window.alert(zy64guaData[i].rows[0]);
+             window.alert(zy64guaData[i].rows[1]);
+             window.alert(zy64guaData[i].rows[2]);
+             window.alert(zy64guaData[i].rows[3]);
+             window.alert(zy64guaData[i].rows[4]);
+             window.alert(zy64guaData[i].rows[5]);
+             window.location.href=zy64guaData[i]['img'];
+             break;
          }
     }
 }
