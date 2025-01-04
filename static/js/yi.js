@@ -109,8 +109,7 @@ function zhanbu(){
 function xtToHt() {
     if (status == 0) { // 切换到后天八卦
         status = 1
-        document.getElementById("yantitle").innerText = "后天八卦"
-        document.getElementById("yanbtn").innerText = "<-"
+        document.getElementById("bubtn").innerText = "后天八卦"
 
         for (var i = 0; i < xt8guaData.length; i++) {
             var row = xt8guaData[i]
@@ -123,8 +122,7 @@ function xtToHt() {
         }
     } else { // 切换到先天八卦
         status = 0
-        document.getElementById("yantitle").innerText = "先天八卦"
-        document.getElementById("yanbtn").innerText = "->"
+        document.getElementById("bubtn").innerText = "先天八卦"
 
         for (var i = 0; i < xt8guaData.length; i++) {
             var row = xt8guaData[i]
