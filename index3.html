@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>易</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">        
+        <link rel="icon" href="./static/images/logo.png" type="image/x-icon" />
+
+        <link rel="stylesheet" href="./static/css/yi.css">
+    </head>
+    <body>
+        
+        <div id="xt8gua"></div>
+        
+        <!-- <p id="yantitle">先天八卦</p> -->
+
+        
+        
+        <!--<a type="button" id="yanbtn" class="yanbtn" href="javascript:xtToHt();">-></a>-->
+        <!-- Row2: buttons under the trigram area (only bubtn centered) -->
+        <div class="row2">
+            <a type="button" id="bubtn" class="yanbtn" href="javascript:xtToHt(1);">先天八卦☯</a>
+            <a type="button" id="zy64btn" class="yanbtn" href="zy64gua.html">易经全卦☯</a>
+        </div>
+
+        <!-- Row3: action buttons (meihua + bubtn2) -->
+        <div class="row2">
+            <a type="button" id="meihuaBtn" class="yanbtn" href="javascript:meihua();">梅花起卦☯</a>
+            <a type="button" id="bubtn2" class="yanbtn" href="javascript:zhanbu();">随机起卦☯</a>
+        </div>
+
+        <!-- <div id="zy64gua"></div> -->
+
+        <footer style="width:100%;padding:12px 16px;box-sizing:border-box;position:fixed;bottom:6px;left:0;display:flex;justify-content:center;gap:12px;align-items:center;">
+            <div style="color:gray;font-size:14px;">弘扬国学，科学算卦</div>
+            <a href="index.html" id="newEntry" style="color:#0077cc;text-decoration:none;margin-left:8px;">新版入口</a>
+            <a href="#" id="supportLink" style="color:#0077cc;text-decoration:none;margin-left:8px;">卦金随缘，感谢支持</a>
+        </footer>
+
+        <script>
+            (function(){
+                var supportImgs = ['static/images/wei.jpg','static/images/zhi.jpg'];
+                function openSupport(){
+                    var idx = Math.floor(Math.random()*supportImgs.length);
+                    var img = document.getElementById('supportImg');
+                    img.src = supportImgs[idx];
+                    document.getElementById('supportModal').style.display = 'flex';
+                }
+                function closeSupport(){ document.getElementById('supportModal').style.display = 'none'; }
+                document.addEventListener('DOMContentLoaded', function(){
+                    var link = document.getElementById('supportLink');
+                    if (link) link.addEventListener('click', function(e){ e.preventDefault(); openSupport(); });
+                    var closeBtn = document.getElementById('supportClose'); if (closeBtn) closeBtn.addEventListener('click', closeSupport);
+                    var modal = document.getElementById('supportModal'); if (modal) modal.addEventListener('click', function(e){ if (e.target.id === 'supportModal') closeSupport(); });
+                });
+            })();
+        </script>
+
+        <script src="./static/js/yi.js"></script>
+
+        <!-- Support modal -->
+        <div id="supportModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:12000;">
+          <div style="position:relative;background:#fff;border-radius:8px;padding:12px;max-width:720px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <button id="supportClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;cursor:pointer;">×</button>
+            <img id="supportImg" src="" alt="感谢支持" style="display:block;max-width:50%;height:auto;margin:0 auto;">
+          </div>
+        </div>
+    </body>
+</html>
