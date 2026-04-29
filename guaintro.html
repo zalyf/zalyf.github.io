@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>卦 介绍</title>
+    <link rel="stylesheet" href="./static/css/yi.css">
+    <style>
+      body { background:#f3f3f3; color:#111; }
+      .wrap { max-width:900px; margin:18px auto; padding:18px; background:#fff; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.08);} 
+      .gua-img { display:block; max-width:40vw; max-height:60vh; width:auto; height:auto; margin:8px 0; object-fit:contain; }
+      .trigram { padding:8px; border:1px solid #eee; border-radius:6px; margin:6px 0; background:#fafafa }
+      pre { white-space:pre-wrap; word-break:break-word; background:#f8f8f8;padding:8px;border-radius:6px;border:1px solid #eee }
+    </style>
+  </head>
+  <body>
+    <div style="padding:12px;"><a class="meihua-btn" href="index.html">← 返回</a></div>
+    <div id="intro" class="wrap">正在加载卦信息…</div>
+
+    <script>
+      (function(){
+        var raw = localStorage.getItem('gua_intro');
+        if (!raw) {
+          document.getElementById('intro').innerHTML = '<div style="color:#999">未找到卦信息。请从64卦列表中点击卦名查看。</div>';
+          return;
+        }
+        try {
+          var d = JSON.parse(raw);
+        } catch(e) {
+          document.getElementById('intro').innerHTML = '<div style="color:#999">卦数据解析失败。</div>';
+          return;
+        }
+
+        var entry = d.entry || {};
+        var up = d.upObj || null;
+        var down = d.downObj || null;
+
+        var html = '';
+        html += '<h2>' + (entry.name || '') + ' 详细介绍</h2>';
+        if (entry.img) html += '<img src="' + entry.img + '" class="gua-img" alt="' + (entry.name||'') + '">';
+        // html += '<div style="margin-top:8px;">代码：' + (entry.code || '') + '</div>';
+        html += '<div style="margin-top:8px;font-weight:700;">爻辞：</div>';
+        if (entry.rows && entry.rows.length) {
+          html += '<div style="text-align:left;margin-top:6px;">';
+          for (var i = entry.rows.length - 1; i >= 0; i--) {
+            html += '<div style="padding:6px;border-radius:4px;margin-bottom:6px;background:#fff;border:1px solid #f0f0f0;">' + (entry.rows[i]||'') + '</div>';
+          }
+          html += '</div>';
+        } else html += '<div class="no-data">无爻辞</div>';
+
+        html += '<div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">';
+        html += '<div style="flex:1;min-width:220px;">';
+        html += '<div style="font-weight:700;margin-bottom:6px;">上卦信息</div>';
+        if (up) html += '<div class="trigram">名称：' + (up.name||'') + '　别名：' + (up.alias||'') + '<br>编码：' + (up.code||up.root||'') + '<br>位置：' + (up.order||'') + '</div>';
+        else html += '<div class="no-data">无上卦信息</div>';
+        html += '</div>';
+
+        html += '<div style="flex:1;min-width:220px;">';
+        html += '<div style="font-weight:700;margin-bottom:6px;">下卦信息</div>';
+        if (down) html += '<div class="trigram">名称：' + (down.name||'') + '　别名：' + (down.alias||'') + '<br>编码：' + (down.code||down.root||'') + '<br>位置：' + (down.order||'') + '</div>';
+        else html += '<div class="no-data">无下卦信息</div>';
+        html += '</div>';
+        html += '</div>';
+
+        // html += '<div style="margin-top:12px;"><div style="font-weight:700;margin-bottom:6px;">完整数据（JSON）</div><pre>' + JSON.stringify(entry, null, 2) + '</pre></div>';
+
+        document.getElementById('intro').innerHTML = html;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,15 +1,15 @@
 // 先天八卦
 var xt8guaData = [
-    {name: "乾", alias: "天", tag: "q", pstxt: "south", pstcn: "南", pstht: "northwest", psthtcn: "西北", code: "111"},       // 0
-    {name: "坤", alias: "地", tag: "ku", pstxt: "north", pstcn: "北", pstht: "southwest", psthtcn: "西南", code: "000"},      // 1
+    {name: "乾", alias: "天", tag: "q", pstxt: "south", pstcn: "南", pstht: "northwest", psthtcn: "西北", code: "111" , order: 1},       // 0
+    {name: "坤", alias: "地", tag: "ku", pstxt: "north", pstcn: "北", pstht: "southwest", psthtcn: "西南", code: "000", order: 8},      // 1
 
-    {name: "兑", alias: "泽", tag: "d", pstxt: "southeast", pstcn: "东南", pstht: "west", psthtcn: "西", code: "011"},        // 2
-    {name: "艮", alias: "山", tag: "g", pstxt: "northwest", pstcn: "西北", pstht: "northeast", psthtcn: "东北", code: "100"}, // 3
+    {name: "兑", alias: "泽", tag: "d", pstxt: "southeast", pstcn: "东南", pstht: "west", psthtcn: "西", code: "011", order: 2},        // 2
+    {name: "艮", alias: "山", tag: "g", pstxt: "northwest", pstcn: "西北", pstht: "northeast", psthtcn: "东北", code: "100", order: 7}, // 3
 
-    {name: "巺", alias: "风", tag: "x", pstxt: "southwest", pstcn: "西南", pstht: "southeast", psthtcn: "东南", code: "110"}, // 4
-    {name: "震", alias: "雷", tag: "z", pstxt: "northeast", pstcn: "东北", pstht: "east", psthtcn: "东北", code: "001"},      // 5
+    {name: "巺", alias: "风", tag: "x", pstxt: "southwest", pstcn: "西南", pstht: "southeast", psthtcn: "东南", code: "110", order: 5}, // 4
+    {name: "震", alias: "雷", tag: "z", pstxt: "northeast", pstcn: "东北", pstht: "east", psthtcn: "东北", code: "001", order: 4},      // 5
 
-    {name: "离", alias: "火", tag: "l", pstxt: "east", pstcn: "东", pstht: "south", psthtcn: "南", code: "101"},              // 6
+    {name: "离", alias: "火", tag: "l", pstxt: "east", pstcn: "东", pstht: "south", psthtcn: "南", code: "101", order: 3},              // 6
     {name: "坎", alias: "水", tag: "ka", pstxt: "west", pstcn: "西", pstht: "north", psthtcn: "北", code: "010"}              // 7
 ]
 

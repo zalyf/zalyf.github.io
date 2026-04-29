@@ -318,7 +318,7 @@
 
 .yanbtn {
     position: absolute;
-    left: 155px;
+    left: 0px;
     top: 540px;
     font-size: 40px;
     text-decoration: none;
@@ -341,6 +341,148 @@
     box-shadow:-4px 0px 8px #f00,0px -2px 8px #000,0px 2px 8px #9e038a,2px 0px 8px #0f0;
     border-radius: 20%;
 }
+
+/* new layout: top button row and responsive handling */
+.btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+}
+.btn-left {
+    display: flex;
+    align-items: center;
+}
+.btn-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+.yanbtn, .yanbtn2, .meihua-btn {
+    position: relative;
+    margin: 0;
+}
+.meihua-btn {
+    font-size: 16px;
+    text-decoration: none;
+    background: #333;
+    color: #fff;
+    padding: 6px 8px 8px 9px;
+    border-radius: 8px;
+    margin: 4px 0px 3px 8px;
+}
+
+/* First row: make xt8gua full width and responsive */
+#xt8gua {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#xt8gua {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    display: block;
+    height: 0px;
+    background: linear-gradient(180deg,#fff,#f6f6f6);
+    position: relative;
+}
+
+/* ensure individual gua render well in the responsive container */
+#xt8gua .gua {
+    float: none;
+    display: inline-block;
+    margin-right: 16px;
+}
+
+/* Second row: bubtn left (absolute), bubtn2 centered */
+
+    .row2 {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: left;
+        padding: 12px 24px;
+        box-sizing: border-box;
+        gap: 30px;
+    }
+    .row2 > a {
+        flex: 0 0 auto;
+        padding: 4px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        background: #fff;
+        color: #111;
+        border: 2px solid #ddd;
+        
+    } 
+
+/* Third row: action buttons centered */
+.row3 {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px 20px 24px;
+    box-sizing: border-box;
+}
+.row3 > a {
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+.row3 > a:first-child {
+    background: #111;
+    color: #fff;
+}
+.row3 > a:last-child {
+    background: #fff;
+    color: #111;
+    border: 2px solid #ddd;
+}
+
+@media (max-width:600px) {
+    .row2, .row3 {
+        flex-direction: column;
+        gap: 12px;
+        padding: 10px 16px;
+    }
+    .row2 > a, .row3 > a {
+        width: 100%;
+        text-align: center;
+    }
+}
+    .row3 {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 8px 16px 20px 16px;
+        box-sizing: border-box;
+    }
+
+    .row4 {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        padding: 8px 16px 24px 16px;
+        box-sizing: border-box;
+    }
+
+    /* ensure bubtn2 in row3 looks appropriate */
+    .row3 .yanbtn2 {
+        position: static;
+        font-size: 20px;
+    }
 
 #yantitle {
     writing-mode: tb-rl;
@@ -365,11 +507,11 @@ footer {
 }
 
 #zy64gua {
-    float: left;
-    /* margin-left: 630px; */
+    clear: both;
+    width: 100%;
     margin-top: 10px;
-    /* width: 100%; */
-    padding-left: 560px;
+    padding: 10px 16px;
+    box-sizing: border-box;
     height: 700px;
     overflow-y: auto;
 }
