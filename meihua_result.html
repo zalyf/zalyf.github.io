@@ -50,8 +50,8 @@
         html += '<h2>' + title + '</h2>';
         html += '<div>科学算卦，心诚则灵</div>';
         html += '</div>';
-        html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +'，干支：' + d.yearTG + '(' + d.branchNumber + '）</div>';
-        html += '<div style="margin-top:8px;">农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') + '　起卦时间：' + (d.timeHMS || '') + '　时辰：' + d.shichen + '（' + d.shichenNumber + '）</div>';
+        html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +'，干支：' + d.yearTG + '(' + d.branchNumber + '）'+ ' 农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') + '</div>';
+        html += '<div style="margin-top:8px;">'起卦时间：' + (d.timeHMS || '') + '　时辰：' + d.shichen + '（' + d.shichenNumber + '）</div>';
         html += '<div style="margin-top:12px;font-weight:700;">上卦：' + (d.upName||'') + '（' + (d.upAlias||'') + '）　下卦：' + (d.downName||'') + '（' + (d.downAlias||'') + '）　动爻：第 ' + d.changeYao + ' 爻</div>';
 
         html += '<div style="display:flex;gap:16px;margin-top:12px;align-items:flex-start;">';
