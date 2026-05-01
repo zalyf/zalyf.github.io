@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>易 - 简洁入口</title>
+    <title>易</title>
     <link rel="stylesheet" href="./static/css/yi.css">
     <style>
         html,
@@ -43,26 +43,30 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            width: 100%
+            width: 100%;
+            align-items: center;
         }
 
         .btn-row a {
-            display: block;
+            display: inline-block;
             text-align: center;
-            padding: 10px 14px;
+            padding: 10px 20px;
             border-radius: 8px;
             background: #0b72d6;
             color: #fff;
-            text-decoration: none
+            text-decoration: none;
+            min-width: 180px;
+            max-width: 90%;
         }
 
-        @media(min-width:520px) {
+        @media (min-width:520px) {
             .btn-row {
-                flex-direction: row
+                /* keep one button per row on wider screens */
+                flex-direction: column;
             }
 
             .btn-row a {
-                flex: 1
+                flex: none;
             }
         }
     </style>
