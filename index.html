@@ -76,6 +76,7 @@
     <div class="center-pane">
         <h1>周易</h1>
         <div class="btn-row">
+            <a id="before" href="before.html">占卜须知</a>
             <a id="zy64btn" href="zy64gua.html">易经全卦☯</a>
             <a id="meihuaBtn" href="javascript:meihua();">梅花起卦☯</a>
             <a id="bubtn2" href="javascript:zhanbu();">随机起卦☯</a>
@@ -119,11 +120,23 @@
                 document.getElementById('supportModal').style.display = 'flex';
             }
             function closeSupport() { document.getElementById('supportModal').style.display = 'none'; }
+
+            // 占卜须知 modal
+            function openBefore() {
+                document.getElementById('beforeModal').style.display = 'flex';
+            }
+            function closeBefore() { document.getElementById('beforeModal').style.display = 'none'; }
+
             document.addEventListener('DOMContentLoaded', function () {
                 var link = document.getElementById('supportLink');
                 if (link) link.addEventListener('click', function (e) { e.preventDefault(); openSupport(); });
                 var closeBtn = document.getElementById('supportClose'); if (closeBtn) closeBtn.addEventListener('click', closeSupport);
                 var modal = document.getElementById('supportModal'); if (modal) modal.addEventListener('click', function (e) { if (e.target.id === 'supportModal') closeSupport(); });
+
+                var beforeLink = document.getElementById('before');
+                if (beforeLink) beforeLink.addEventListener('click', function(e){ e.preventDefault(); openBefore(); });
+                var beforeClose = document.getElementById('beforeClose'); if (beforeClose) beforeClose.addEventListener('click', closeBefore);
+                var beforeModal = document.getElementById('beforeModal'); if (beforeModal) beforeModal.addEventListener('click', function(e){ if (e.target.id === 'beforeModal') closeBefore(); });
             });
         })();
     </script>
@@ -137,6 +150,19 @@
             <img id="supportImg" src="" alt="感谢支持" style="display:block;max-width:50%;height:auto;margin:0 auto;">
         </div>
     </div>
+
+        <!-- 占卜须知 modal -->
+        <div id="beforeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:12500;">
+            <div style="position:relative;background:#fff;border-radius:8px;padding:18px;max-width:420px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.25);text-align:center;">
+                <button id="beforeClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:24px;line-height:1;cursor:pointer;">×</button>
+                <h3 style="margin-top:6px;margin-bottom:8px;">占卜须知</h3>
+                <div style="font-size:16px;color:#222;line-height:1.8;">
+                    <div>不疑不卜</div>
+                    <div>不诚不卜</div>
+                    <div>不信不卜</div>
+                </div>
+            </div>
+        </div>
 </body>
 
 </html>

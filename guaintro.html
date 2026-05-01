@@ -18,6 +18,7 @@
     <div id="intro" class="wrap">正在加载卦信息…</div>
 
     <script>
+      document.addEventListener('DOMContentLoaded', function(){
       (function(){
         var raw = localStorage.getItem('gua_intro');
         if (!raw) {
@@ -37,7 +38,7 @@
 
         var html = '';
         html += '<h2>' + (entry.name || '') + ' 详细介绍</h2>';
-        if (entry.img) html += '<img src="' + entry.img + '" class="gua-img" alt="' + (entry.name||'') + '">';
+        if (entry.img) html += '<img src="' + entry.img + '" class="gua-img clickable-img" alt="' + (entry.name||'') + '">';
         // html += '<div style="margin-top:8px;">代码：' + (entry.code || '') + '</div>';
         html += '<div style="margin-top:8px;font-weight:700;">爻辞：</div>';
         if (entry.rows && entry.rows.length) {
@@ -65,7 +66,31 @@
         // html += '<div style="margin-top:12px;"><div style="font-weight:700;margin-bottom:6px;">完整数据（JSON）</div><pre>' + JSON.stringify(entry, null, 2) + '</pre></div>';
 
         document.getElementById('intro').innerHTML = html;
+
+        // Image viewer modal behavior: open clicked image in a modal
+        function openImage(src){
+          var m = document.getElementById('imageModal');
+          var im = document.getElementById('imageModalImg');
+          if (!m || !im) return;
+          im.src = src;
+          m.style.display = 'flex';
+        }
+        function closeImage(){ var m = document.getElementById('imageModal'); if (m) m.style.display = 'none'; }
+
+        var imgClose = document.getElementById('imageModalClose'); if (imgClose) imgClose.addEventListener('click', closeImage);
+        var imgModal = document.getElementById('imageModal'); if (imgModal) imgModal.addEventListener('click', function(e){ if (e.target.id === 'imageModal') closeImage(); });
+
+        var imgs = document.querySelectorAll('.clickable-img');
+        imgs.forEach(function(i){ i.style.cursor = 'zoom-in'; i.addEventListener('click', function(){ openImage(i.src || i.getAttribute('data-src')); }); });
       })();
+      });
     </script>
+    <!-- Image viewer modal -->
+    <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;">
+      <div style="position:relative;background:transparent;border-radius:8px;padding:12px;max-width:90vw;width:90%;display:flex;align-items:center;justify-content:center;">
+        <button id="imageModalClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;color:#fff;cursor:pointer;">×</button>
+        <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;" />
+      </div>
+    </div>
   </body>
 </html>

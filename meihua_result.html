@@ -50,15 +50,32 @@
         html += '<h2>' + title + '</h2>';
         html += '<div>科学算卦，心诚则灵</div>';
         html += '</div>';
-        html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +' 干支：' + d.yearTG + '(' + d.branchNumber + '）'+ ' 农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') + '</div>';
+        html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +' ,农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') +' ,干支：' + d.yearTG + '(' + d.branchNumber + '）'+ '</div>';
         html += '<div style="margin-top:8px;">起卦时间：' + (d.timeHMS || '') + '　时辰：' + d.shichen + '（' + d.shichenNumber + '）</div>';
         html += '<div style="margin-top:12px;font-weight:700;">上卦：' + (d.upName||'') + '（' + (d.upAlias||'') + '）　下卦：' + (d.downName||'') + '（' + (d.downAlias||'') + '）　动爻：第 ' + d.changeYao + ' 爻</div>';
+
+        // prepare labels for 本卦 / 变卦 — if upAlias equals downAlias, show as "foundX为downAlias"
+        var upAlias = d.upAlias || '';
+        var downAlias = d.downAlias || '';
+        var benLabel = '';
+        if (upAlias && downAlias && upAlias === downAlias) {
+          benLabel = (d.foundBen || '') + '为' + downAlias;
+        } else {
+          benLabel = upAlias + downAlias + '（' + (d.foundBen || '') + '）';
+        }
+        var bianAlias = d.bianAlias || '';
+        var bianLabel = '';
+        if (bianAlias && bianAlias.length >= 2 && bianAlias.charAt(0) === bianAlias.charAt(1)) {
+          bianLabel = (d.foundBian || '') + '为' + bianAlias.charAt(0);
+        } else {
+          bianLabel = (bianAlias || '') + '（' + (d.foundBian || '') + '）';
+        }
 
         html += '<div style="display:flex;gap:16px;margin-top:12px;align-items:flex-start;">';
 
         // 本卦
         html += '<div style="flex:1;">';
-        html += '<div style="font-weight:700;margin-bottom:8px;">本卦：' + (d.upAlias||'') + (d.downAlias||'') + '（' + (d.foundBen||'') + '）</div>';
+        html += '<div style="font-weight:700;margin-bottom:8px;">本卦：' + benLabel + '</div>';
         if (d.foundRows && d.foundRows.length) {
           html += '<div class="yao-list">';
           // foundRows stored as bottom->top; render top->bottom highlighting moving yao
@@ -72,13 +89,13 @@
           html += '</div>';
         } else html += '<div class="no-data">无爻辞数据</div>';
 
-        if (d.foundImg) html += '<div style="margin-top:12px;"><img src="' + d.foundImg + '" style="display:block;max-width:20vw;max-height:30vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="本卦"></div>';
+        if (d.foundImg) html += '<div style="margin-top:12px;"><img class="clickable-img" src="' + d.foundImg + '" style="display:block;max-width:40vw;max-height:60vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="本卦"></div>';
         else html += '<div class="no-data">无图片</div>';
         html += '</div>'; // end left
 
         // 变卦
         html += '<div style="flex:1;">';
-        html += '<div style="font-weight:700;margin-bottom:8px;">变卦：' + (d.bianAlias||'') + '（' + (d.foundBian||'') + '）</div>';
+        html += '<div style="font-weight:700;margin-bottom:8px;">变卦：' + bianLabel + '</div>';
         if (d.foundBianRows && d.foundBianRows.length) {
           html += '<div class="yao-list">';
           var highlightIdxTopB = 6 - d.changeYao;
@@ -91,7 +108,7 @@
           html += '</div>';
         } else html += '<div class="no-data">无爻辞数据</div>';
 
-        if (d.foundBianImg) html += '<div style="margin-top:12px;"><img src="' + d.foundBianImg + '" style="display:block;max-width:20vw;max-height:30vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="变卦"></div>';
+        if (d.foundBianImg) html += '<div style="margin-top:12px;"><img class="clickable-img" src="' + d.foundBianImg + '" style="display:block;max-width:40vw;max-height:60vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="变卦"></div>';
         else html += '<div class="no-data">无图片</div>';
         html += '</div>'; // end right
 
@@ -122,6 +139,24 @@
           var link = document.getElementById('supportLink'); if (link) link.addEventListener('click', function(e){ e.preventDefault(); openSupport(); });
           var closeBtn = document.getElementById('supportClose'); if (closeBtn) closeBtn.addEventListener('click', closeSupport);
           var modal = document.getElementById('supportModal'); if (modal) modal.addEventListener('click', function(e){ if (e.target.id === 'supportModal') closeSupport(); });
+
+          // Image viewer modal: attach click handlers to images we just injected
+          function openImage(src){
+            var m = document.getElementById('imageModal');
+            var im = document.getElementById('imageModalImg');
+            if (!m || !im) return;
+            im.src = src;
+            m.style.display = 'flex';
+          }
+          function closeImage(){ var m = document.getElementById('imageModal'); if (m) m.style.display = 'none'; }
+
+          // attach close handler
+          var imgClose = document.getElementById('imageModalClose'); if (imgClose) imgClose.addEventListener('click', closeImage);
+          var imgModal = document.getElementById('imageModal'); if (imgModal) imgModal.addEventListener('click', function(e){ if (e.target.id === 'imageModal') closeImage(); });
+
+          // make clickable thumbnails open the image modal
+          var imgs = document.querySelectorAll('.clickable-img');
+          imgs.forEach(function(i){ i.style.cursor = 'zoom-in'; i.addEventListener('click', function(){ openImage(i.src || i.getAttribute('data-src')); }); });
         });
 
       })();
@@ -132,6 +167,14 @@
         <div style="position:relative;background:#fff;border-radius:8px;padding:12px;max-width:720px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
           <button id="supportClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;cursor:pointer;">×</button>
           <img id="supportImg" src="" alt="感谢支持" style="display:block;max-width:50%;height:auto;margin:0 auto;">
+        </div>
+      </div>
+
+      <!-- Image viewer modal -->
+      <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;">
+        <div style="position:relative;background:transparent;border-radius:8px;padding:12px;max-width:90vw;width:90%;display:flex;align-items:center;justify-content:center;">
+          <button id="imageModalClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;color:#fff;cursor:pointer;">×</button>
+          <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;" />
         </div>
       </div>
   </body>
