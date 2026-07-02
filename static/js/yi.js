@@ -45,7 +45,8 @@ function getDateInfo(now) {
     var hh = String(now.getHours()).padStart(2,'0');
     var mm = String(now.getMinutes()).padStart(2,'0');
     var ss = String(now.getSeconds()).padStart(2,'0');
-    var ms = String(now.getMilliseconds()).padStart(3,'0');
+    var milliseconds = now.getMilliseconds();
+    var ms = String(milliseconds).padStart(3,'0');
     var timeHMS = hh + ':' + mm + ':' + ss + '.' + ms;
 
     return {
@@ -57,6 +58,7 @@ function getDateInfo(now) {
         gregMonth: gregMonth,
         gregDay: gregDay,
         timeHMS: timeHMS,
+        milliseconds: milliseconds,
         shichen: shichen,
         shichenNumber: shichenNumber
     };
@@ -110,6 +112,8 @@ function gua(name, code, pstxt, pstcn, tag) {
 }
 
 function zhanbu(){
+    // 随机起卦功能已停用，保留原实现以备参考。
+    /*
     // generate two random trigrams (lower = yaoxia, upper = yaoshang)
     var yaoxia = [], yaoshang = [];
     for (var k = 0; k < 3; k++) yaoxia.push(Math.random() < 0.5 ? '0' : '1');
@@ -228,6 +232,8 @@ function zhanbu(){
     } catch (e) {
         alert('无法保存结果到本地：' + e.message);
     }
+    */
+    alert('随机起卦已停用，请使用“天时起卦”或“心事起卦”。');
 }
 // 文王拘而演周易
 function xtToHt() {
@@ -321,7 +327,8 @@ function openGuaIntro(idx) {
     }
 }
 
-// 梅花起卦 (simple implementation)
+// 梅花起卦 (simple implementation) — 原始实现已注释，保留作为参考。
+/*
 function meihua() {
     try {
         var now = new Date();
@@ -489,4 +496,152 @@ function meihua() {
     } catch (e) {
         alert('梅花起卦 发生错误: ' + e.message);
     }
+}
+*/
+
+function computeMeihuaIndices(di, extra) {
+    var base = di.branchNumber + di.lunarMonth + di.lunarDay;
+    extra = Number(extra) || 0;
+    var upIndex = (base + extra) % 8; if (upIndex == 0) upIndex = 8;
+    var downIndex = (base + di.shichenNumber + extra) % 8; if (downIndex == 0) downIndex = 8;
+    var changeYao = (base + di.shichenNumber) % 6; if (changeYao == 0) changeYao = 6;
+    return { upIndex: upIndex, downIndex: downIndex, changeYao: changeYao };
+}
+
+function findGuaEntry(ord) {
+    var orderToCode = ['111','011','101','001','110','010','100','000'];
+    for (var ii = 0; ii < xt8guaData.length; ii++) {
+        if (xt8guaData[ii].order == ord) return { index: ii, entry: xt8guaData[ii] };
+    }
+    var target = (typeof ord === 'number') ? orderToCode[ord - 1] : String(ord);
+    for (var jj = 0; jj < xt8guaData.length; jj++) {
+        if ((xt8guaData[jj].code || '') == target || (xt8guaData[jj].root || '') == target) return { index: jj, entry: xt8guaData[jj] };
+    }
+    return null;
+}
+
+function findGuaByRoot(root) {
+    for (var jj = 0; jj < xt8guaData.length; jj++) {
+        if ((xt8guaData[jj].root || '') == root || (xt8guaData[jj].code || '') == root) return { index: jj, entry: xt8guaData[jj] };
+    }
+    return null;
+}
+
+function buildMeihuaResult(di, upIndex, downIndex, changeYao, source) {
+    var upFound = findGuaEntry(upIndex);
+    var downFound = findGuaEntry(downIndex);
+    var upObj = upFound ? upFound.entry : { name: ('卦' + upIndex), alias: '', code: '000' };
+    var downObj = downFound ? downFound.entry : { name: ('卦' + downIndex), alias: '', code: '000' };
+    var upGua = upObj.name;
+    var downGua = downObj.name;
+    var upAlias = upObj.alias || '';
+    var downAlias = downObj.alias || '';
+    var upArrayIndex = upFound ? upFound.index : (upIndex - 1);
+    var downArrayIndex = downFound ? downFound.index : (downIndex - 1);
+    var orderToCode = ['111','011','101','001','110','010','100','000'];
+    var upRoot = upObj.code || upObj.root || orderToCode[upArrayIndex] || '000';
+    var downRoot = downObj.code || downObj.root || orderToCode[downArrayIndex] || '000';
+    var combined = (upRoot + downRoot).slice(0, 6);
+    var flipIdx = 6 - changeYao;
+    var arrBits = combined.split('');
+    if (flipIdx >= 0 && flipIdx < arrBits.length) arrBits[flipIdx] = arrBits[flipIdx] === '0' ? '1' : '0';
+    var newBinary = arrBits.join('');
+    var bianUpRoot = newBinary.slice(0, 3);
+    var bianDownRoot = newBinary.slice(3, 6);
+    var bianUpFound = findGuaByRoot(bianUpRoot);
+    var bianDownFound = findGuaByRoot(bianDownRoot);
+    var bianUpObj = bianUpFound ? bianUpFound.entry : { name: ('卦'), alias: '', code: bianUpRoot };
+    var bianDownObj = bianDownFound ? bianDownFound.entry : { name: ('卦'), alias: '', code: bianDownRoot };
+    var bianAlias = (bianUpObj.alias || '') + (bianDownObj.alias || '');
+    var bianUpArrayIndex = bianUpFound ? bianUpFound.index : null;
+    var bianDownArrayIndex = bianDownFound ? bianDownFound.index : null;
+    var foundBen = null, foundImg = null, foundRows = null;
+    var foundBian = null, foundBianImg = null, foundBianRows = null;
+    for (var i = 0; i < zy64guaData.length; i++) {
+        var code = String(zy64guaData[i].code || '');
+        if (code.length >= 2) {
+            if (code[0] == upArrayIndex && code[1] == downArrayIndex) {
+                foundBen = zy64guaData[i].name; foundImg = zy64guaData[i].img; foundRows = zy64guaData[i].rows;
+            }
+            if (bianUpArrayIndex !== null && bianDownArrayIndex !== null && code[0] == bianUpArrayIndex && code[1] == bianDownArrayIndex) {
+                foundBian = zy64guaData[i].name; foundBianImg = zy64guaData[i].img; foundBianRows = zy64guaData[i].rows;
+            }
+            if (foundImg && foundBianImg) break;
+        }
+    }
+    return {
+        year: di.year,
+        yearTG: di.yearTG,
+        branchNumber: di.branchNumber,
+        lunarMonth: di.lunarMonth,
+        lunarDay: di.lunarDay,
+        gregMonth: di.gregMonth,
+        gregDay: di.gregDay,
+        timeHMS: di.timeHMS,
+        shichen: di.shichen,
+        shichenNumber: di.shichenNumber,
+        upIndex: upIndex,
+        downIndex: downIndex,
+        changeYao: changeYao,
+        upName: upGua,
+        downName: downGua,
+        upAlias: upAlias,
+        downAlias: downAlias,
+        upCode: upRoot,
+        downCode: downRoot,
+        bianUpCode: bianUpRoot,
+        bianDownCode: bianDownRoot,
+        bianUpObj: bianUpObj,
+        bianDownObj: bianDownObj,
+        bianAlias: bianAlias,
+        bianName: (bianUpObj && bianUpObj.name ? bianUpObj.name : '') + (bianDownObj && bianDownObj.name ? bianDownObj.name : ''),
+        foundBen: foundBen,
+        foundImg: foundImg,
+        foundRows: foundRows,
+        foundBian: foundBian,
+        foundBianImg: foundBianImg,
+        foundBianRows: foundBianRows,
+        source: source
+    };
+}
+
+function meihuaTianshi() {
+    var now = new Date();
+    var di = getDateInfo(now);
+    var indices = computeMeihuaIndices(di, di.milliseconds);
+    var dataObj = buildMeihuaResult(di, indices.upIndex, indices.downIndex, indices.changeYao, 'tianshi');
+    try {
+        localStorage.setItem('meihua_result', JSON.stringify(dataObj));
+        window.location.href = 'meihua_result.html';
+    } catch (e) {
+        alert('无法保存结果到本地：' + e.message);
+    }
+}
+
+function meihuaXinShiWithInput(input) {
+    if (!input || input.trim().length === 0) {
+        return meihuaTianshi();
+    }
+    var sum = 0;
+    for (var i = 0; i < input.length; i++) {
+        sum += input.charCodeAt(i);
+    }
+    var now = new Date();
+    var di = getDateInfo(now);
+    var indices = computeMeihuaIndices(di, sum);
+    var dataObj = buildMeihuaResult(di, indices.upIndex, indices.downIndex, indices.changeYao, 'xinshi');
+    try {
+        localStorage.setItem('meihua_result', JSON.stringify(dataObj));
+        window.location.href = 'meihua_result.html';
+    } catch (e) {
+        alert('无法保存结果到本地：' + e.message);
+    }
+}
+
+function meihuaXinShi() {
+    window.location.href = 'input.html';
+}
+
+function meihua() {
+    return meihuaTianshi();
 }

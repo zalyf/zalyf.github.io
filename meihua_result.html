@@ -44,11 +44,18 @@
         }
 
         // build HTML similar to previous floating panel
-        var title = (d && d.source === 'zhanbu') ? '随机起卦 结果' : '梅花起卦 结果';
+        var title = '易卦 结果';
+        if (d && d.source === 'zhanbu') title = '随机起卦 结果';
+        else if (d && d.source === 'tianshi') title = '天时起卦 结果';
+        else if (d && d.source === 'xinshi') title = '心事起卦 结果';
+        else if (d && d.source === 'meihua') title = '梅花起卦 结果';
         var html = '';
         html += '<div class="result-header">';
         html += '<h2>' + title + '</h2>';
+        html += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
         html += '<div>科学算卦，心诚则灵</div>';
+        html += '<button id="duanBtn" type="button" style="padding:8px 12px;border:0;border-radius:6px;background:#0b72d6;color:#fff;cursor:pointer;">卦师解卦</button>';
+        html += '</div>';
         html += '</div>';
         html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +' ,农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') +' ,干支：' + d.yearTG + '(' + d.branchNumber + '）'+ '</div>';
         html += '<div style="margin-top:8px;">起卦时间：' + (d.timeHMS || '') + '　时辰：' + d.shichen + '（' + d.shichenNumber + '）</div>';
@@ -115,6 +122,34 @@
         html += '</div>'; // end flex
 
         document.getElementById('meihua_result').innerHTML = html;
+
+        var duanBtn = document.getElementById('duanBtn');
+        if (duanBtn) {
+          duanBtn.addEventListener('click', function () {
+            try {
+              var payload = {
+                upName: d.upName || '',
+                upAlias: d.upAlias || '',
+                downName: d.downName || '',
+                downAlias: d.downAlias || '',
+                upCode: d.upCode || '',
+                downCode: d.downCode || '',
+                bianUpName: d.bianUpObj && d.bianUpObj.name ? d.bianUpObj.name : '',
+                bianUpAlias: d.bianUpObj && d.bianUpObj.alias ? d.bianUpObj.alias : '',
+                bianDownName: d.bianDownObj && d.bianDownObj.name ? d.bianDownObj.name : '',
+                bianDownAlias: d.bianDownObj && d.bianDownObj.alias ? d.bianDownObj.alias : '',
+                bianUpCode: d.bianUpCode || '',
+                bianDownCode: d.bianDownCode || '',
+                changeYao: d.changeYao,
+                source: d.source || ''
+              };
+              localStorage.setItem('duan_payload', JSON.stringify(payload));
+              window.location.href = 'duan.html?data=' + encodeURIComponent(JSON.stringify(payload));
+            } catch (e) {
+              alert('跳转失败：' + e.message);
+            }
+          });
+        }
 
         // cleanup stored data (optional) - keep a copy for back-navigation if needed
         // localStorage.removeItem('meihua_result');
