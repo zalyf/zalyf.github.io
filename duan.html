@@ -1,26 +1,210 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>卦师解卦</title>
   <style>
-    body { margin:0; font-family: "Microsoft YaHei", sans-serif; background:#f5efe3; color:#222; }
-    .page { min-height:100vh; display:flex; flex-direction:column; }
-    .topbar { padding:12px 16px; display:flex; justify-content:space-between; align-items:center; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-    .wrap { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; padding:16px; box-sizing:border-box; }
-    .panel { background:#fff; border-radius:12px; padding:16px; box-shadow:0 4px 14px rgba(0,0,0,0.08); overflow:auto; }
-    .panel:last-child { grid-column:1/-1; }
-    .panel h3 { margin-top:0; }
-    .title { font-size:24px; font-weight:bold; margin-bottom:12px; color:#8a3d0f; }
-    .line { font-size:16px; line-height:1.8; margin-bottom:8px; }
-    .label { display:inline-block; min-width:76px; font-weight:bold; color:#0b72d6; margin-right:8px; }
-    .empty { color:#777; }
-    @media (max-width:900px) { .wrap { grid-template-columns:1fr; } .panel:last-child { grid-column:auto; } }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f5efe3;
+      color: #222;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .wrap {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      overflow: auto;
+    }
+
+    .panel:last-child {
+      grid-column: 1/-1;
+    }
+
+    .panel h3 {
+      margin-top: 0;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #8a3d0f;
+    }
+
+    .line {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+
+    .label {
+      display: inline-block;
+      min-width: 76px;
+      font-weight: bold;
+      color: #0b72d6;
+      margin-right: 8px;
+    }
+
+    .empty {
+      color: #777;
+    }
+
+    @media (max-width:900px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .panel:last-child {
+        grid-column: auto;
+      }
+    }
+
+
+    /* 全屏遮罩层 */
+    .modal-mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      /* 磨砂玻璃效果，隐约能看到底部的排盘，勾起好奇心 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    /* 弹窗主体 */
+    .modal-box {
+      background: #fff;
+      width: 90%;
+      max-width: 420px;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      border-top: 4px solid #0b72d6;
+      /* 呼应你原本的主题蓝色 */
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 20px;
+    }
+
+    .modal-content {
+      margin: 20px 0;
+    }
+
+    .warning-text {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      background: #fdf8e2;
+      border-left: 3px solid #f59e0b;
+      padding: 12px;
+      border-radius: 4px;
+      text-align: left;
+    }
+
+    /* 收款码容器 */
+    .qr-container {
+      margin-top: 20px;
+    }
+
+    .qr-code {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .qr-tip {
+      font-size: 12px;
+      color: #999;
+      margin-top: 6px;
+    }
+
+    /* 解锁按钮 */
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #0b72d6;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:disabled {
+      background-color: #cccccc;
+      color: #666666;
+      cursor: not-allowed;
+    }
   </style>
+
 </head>
+
 <body>
   <div class="page">
+    <div id="gongde-modal" class="modal-mask">
+      <div class="modal-box">
+        <h2>☯️ 乾坤有数 · 卦不空回</h2>
+        <div class="modal-content">
+          <p class="warning-text">
+            本系统深度断语已接入能量对倒机制。<br>
+            随缘随喜，落子无悔。付多付少皆是功德，不付亦不强求，但由此引发的因果磁场，需由求测者自行承载。
+          </p>
+
+          <div class="qr-container">
+            <img src="./static/images/wei.jpg" alt="随缘结缘码" class="qr-code">
+            <p class="qr-tip">▲ 扫码随缘随喜（支持微信/支付宝）</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-unlock" class="btn-primary" disabled>请稍候 (10s)</button>
+        </div>
+      </div>
+    </div>
+
     <div class="topbar">
       <div><strong>卦师解卦</strong></div>
       <a href="index.html" style="color:#0b72d6;text-decoration:none;">返回首页</a>
@@ -47,5 +231,34 @@
 
   <script src="./static/js/data.js"></script>
   <script src="./static/js/duan.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById('gongde-modal');
+      const unlockBtn = document.getElementById('btn-unlock');
+      let timeLeft = 10; // 倒计时 10 秒
+
+      // 启动定时器
+      const timer = setInterval(function () {
+        timeLeft--;
+        if (timeLeft > 0) {
+          unlockBtn.innerText = `请稍候 (${timeLeft}s)`;
+        } else {
+          clearInterval(timer);
+          // 倒计时结束，激活按钮并改写极具震慑力的文案
+          unlockBtn.removeAttribute('disabled');
+          unlockBtn.innerText = '已付随缘卦金 / 自承因果，诚信解锁';
+          unlockBtn.style.backgroundColor = '#d97706'; // 变色提醒可点击
+        }
+      }, 1000);
+
+      // 点击按钮，关闭弹窗，展示深度断语
+      unlockBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+      });
+    });
+  </script>
+
 </body>
+
 </html>
