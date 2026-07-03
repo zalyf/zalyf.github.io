@@ -47,7 +47,7 @@ function getDateInfo(now) {
     var ss = String(now.getSeconds()).padStart(2,'0');
     var milliseconds = now.getMilliseconds();
     var ms = String(milliseconds).padStart(3,'0');
-    var timeHMS = hh + ':' + mm + ':' + ss + '.' + ms;
+    var timeHMS = hh + ':' + mm + ':' + ss + ':' + ms;
 
     return {
         year: y,

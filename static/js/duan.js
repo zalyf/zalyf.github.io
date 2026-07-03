@@ -97,170 +97,286 @@
         return resolveRelation(body, use);
     }
 
+    /**
+ * 终极完美融合抛光版：多场景定制化生克断语生成器
+ * 支持投资、事业、健康、感情、日常全场景，排版优化，语气平衡
+ */
     function getDuanText(benRel, bianRel) {
-        // ==========================================
-        // 1. 健壮性检查
-        // ==========================================
         if (!benRel || !bianRel) {
             return {
                 title: '【暂无断语】',
                 line1: '乾坤未定，变数丛生。',
-                line2: '未能获取到完整的本卦或变卦五行生克关系，请重新起卦尝试。'
+                line2: '未能获取完整生克关系，请重新起卦。'
             };
         }
 
-        // ==========================================
-        // 2. 完美双比和 / 锦上添花爆款
-        // ==========================================
+        const normalize = (str) => {
+            if (typeof str !== 'string') return '';
+            return str.trim()
+                .replace(/：.*$|[:].*$/g, '')
+                .replace(/比肩|同气|和合/g, '比和')
+                .replace(/体生|我生|泄气/g, '体生用')
+                .replace(/体克|我克/g, '体克用')
+                .replace(/用生|生我/g, '用生体')
+                .replace(/用克|克我/g, '用克体')
+                .substring(0, 3);
+        };
+
+        benRel = normalize(benRel);
+        bianRel = normalize(bianRel);
+
+        // =========================================================================
+        // 第一档：顶级大吉
+        // =========================================================================
         if (benRel === '比和' && bianRel === '比和') {
             return {
                 title: '【比肩同气】',
                 line1: '挚友相扶，同气连枝；强强联手，固若金汤。',
-                line2: '这是最稳固的“神仙组合”，占得此卦，主大吉。说明你和要测的人、事、环境气场完全相投，一拍即合。周围的人都会来帮你，做起来毫不费力，双方互利共赢，事情自然而然就能水到渠成。'
-            };
-        }
-        if (benRel === '比和' && bianRel === '用生体') {
-            return {
-                title: '【锦上添花】',
-                line1: '始遇知己，终获大奖；顺水推舟，造化无穷。',
-                line2: '极其幸运的组合。一开局大家就谈得非常投缘，气场相投。随着事情的发展，到了大结局，对方甚至愿意拿出更多的资源、利益来主动推你一把（用生体）。属于好上加好，收尾时利益最大化的绝佳之象。'
-            };
-        }
-        if (benRel === '用生体' && bianRel === '用生体') {
-            return {
-                title: '【顺风顺水】',
-                line1: '天时地利，左右逢源；不费吹灰，圆满成功。',
-                line2: '这是最吉利的组合。这件事对你非常有利。一路上顺风顺水，阻力极小。结局也异常圆满，属于天时地利人和备齐。'
+                line2: '最稳固的同盟格局，主大吉！你与环境、团队气场完全相投，资源主动靠拢，做事顺风顺水。<br><br>' +
+                    '📈【投资金融】极其利好合作盘和中长线布局，伙伴助力明显，容易利滚利。<br>' +
+                    '💼【事业工作】团队默契度高，谈判签约顺畅，易遇神队友，项目平稳推进。<br>' +
+                    '🩺【健康求医】身体状态平稳，若有小恙易找到对症方案，恢复较快。<br>' +
+                    '❤️【感情人际】双方高度同频，三观契合，关系自然升温，容易修成正果或长久和谐。<br>' +
+                    '🚗【日常出行】一路顺遂，易在旅途中结识志同道合的新朋友，诸事皆宜。'
             };
         }
 
-        // ==========================================
-        // 3. 各种中途或结局大和解（变卦比和）
-        // ==========================================
+        if ((benRel === '用生体' && bianRel === '用生体') || (benRel === '比和' && bianRel === '用生体')) {
+            return {
+                title: '【锦上添花】',
+                line1: '始遇知己，终获大奖；顺水推舟，造化无穷。',
+                line2: '极其幸运的顶级生扶局。开局自带红利，越往后外部资源越主动为你输血，好上加好。<br><br>' +
+                    '📈【投资金融】财运爆棚！市场大势站在你这边，适合积极做多，易获波段或政策红利。<br>' +
+                    '💼【事业工作】升职加薪或开拓新业务的绝佳时机，贵人主动铺路，方案通过率极高。<br>' +
+                    '🩺【健康求医】能量得到强烈滋养，久病者易遇良医，恢复迅速。<br>' +
+                    '❤️【感情人际】桃花极旺！对方愿意主动付出，关系快速升温进入稳定甜蜜期。<br>' +
+                    '🚗【日常出行】贵人运极旺，在外多得照顾款待，办事出差均能超出预期。'
+            };
+        }
+
         if (benRel === '用生体' && bianRel === '比和') {
             return {
                 title: '【贵人铺路】',
                 line1: '知己收尾，万事皆顺；顺水推舟，造化无穷。',
-                line2: '极其丝滑的极速通关之象。一开局就有很好的机遇、大势或贵人主动送上门来带你入门（用生体）。到了大结局时，你与这件事或者整个团队完美融合，彼此打成一片、利益共享（比和）。属于从头顺到尾，毫无内耗的圆满结局。'
+                line2: '极丝滑的通关之象。开局贵人带你入门，后期完美融合，毫无内耗，从头顺到尾。<br><br>' +
+                    '📈【投资金融】前期靠核心消息或大资金带飞，后期进入稳定盈利期，适合成熟稳健资产。<br>' +
+                    '💼【事业工作】新项目或入职极为顺利，前期有人带教，后期快速融入团队，氛围融洽。<br>' +
+                    '🩺【健康求医】前期治疗效果立竿见影，后期可通过日常调养平稳维持。<br>' +
+                    '❤️【感情人际】相处顺理成章，从初见快速走向深度融合，关系对等稳定且互利。<br>' +
+                    '🚗【日常出行】顺遂无忧，办事效率高，常得他人热情帮助。'
             };
         }
-        if (benRel === '用克体' && bianRel === '比和') {
+
+        // =========================================================================
+        // 第二档：强控与结局大和解
+        // =========================================================================
+        if (benRel === '体克用' && bianRel === '体克用') {
             return {
-                title: '【化敌为友】',
-                line1: '始图艰难，终能言和；历尽波折，化敌为友。',
-                line2: '典型的“触底反弹”剧本。刚开始外部环境对你极其挑剔，压力大到让你喘不过气（用克体）。但千万别放弃，随着事情发展，到了最终大结局时，对方被你的诚意打动，或者危机解除，大家反而变成了并肩作战的伙伴（比和）。属于化干戈为玉帛、平安落幕之象。'
+                title: '【稳操胜券】',
+                line1: '运筹帷幄，主权在我；虽需劳心，终必有成。',
+                line2: '靠硬实力硬啃胜果的全面胜局！全程主动权在你手中，虽需费心推进，但结局确定能成。<br><br>' +
+                    '📈【投资金融】需严格执行自身策略，靠技术与纪律硬赚，不适合盲目跟风。<br>' +
+                    '💼【事业工作】你是绝对主导者，工作量大但项目完全在掌控中，一分耕耘一分收获。<br>' +
+                    '🩺【健康求医】需主动调理和坚持，虽辛苦但能战胜问题。<br>' +
+                    '❤️【感情人际】你掌握节奏，需多付出但可建立牢固稳定关系。<br>' +
+                    '🚗【日常出行】行程在计划内，虽劳顿但最终能达成目标。'
             };
         }
+
         if (benRel === '体克用' && bianRel === '比和') {
             return {
                 title: '【群援相随】',
                 line1: '先苦后甜，越做越顺；孤军奋战，终得群援。',
-                line2: '靠实力赢得市场的开拓者之象。刚开始需要你担任主角、费尽心力去主动推进、征服这个项目（体克用）。但只要你把它啃下来，到了大结局时，事情就有了深厚的群众基础，大家都来响应你、配合你（比和），从你一人的“孤军奋战”变成大家的“同心协力”。'
+                line2: '开拓者剧本。前期独自攻坚，啃下来后大家都会响应配合。<br><br>' +
+                    '📈【投资金融】前期独自承担风险建仓，后期主力跟进，顺利退出。<br>' +
+                    '💼【事业工作】适合创业或新领域，前期冲锋，后期团队同心。<br>' +
+                    '🩺【健康求医】前期劳心找方案，后期免疫力重回巅峰。<br>' +
+                    '❤️【感情人际】你先主动付出，后被对方真心接纳。<br>' +
+                    '🚗【日常出行】开局手忙脚乱，后期与团队汇合，热闹圆满。'
             };
         }
+
+        if (benRel === '用克体' && bianRel === '比和') {
+            return {
+                title: '【化敌为友】',
+                line1: '始图艰难，终能言和；历尽波折，化敌为友。',
+                line2: '触底反弹格局。开局压力大，挺住后化干戈为玉帛。<br><br>' +
+                    '📈【投资金融】开局可能套牢，勿盲目割肉，熬过去后行情回暖。<br>' +
+                    '💼【事业工作】先遭挑剔或竞争，后期和解转为伙伴。<br>' +
+                    '🩺【健康求医】前期症状来势汹汹，后期积极治疗可转危为安。<br>' +
+                    '❤️【感情人际】前期有矛盾，后期冰释前嫌，关系反而更紧密。<br>' +
+                    '🚗【日常出行】开局有阻碍，保持耐心后自然转机。'
+            };
+        }
+
         if (benRel === '体生用' && bianRel === '比和') {
             return {
                 title: '【因祸得福】',
                 line1: '始虽吃亏，终得回报；以诚相待，化作知交。',
-                line2: '这是一个典型的“先付出后收获”的温情剧本。刚开始你需要单方面付出巨大的精力、资金或情绪价值去倒贴这件事，或者感觉一直在为别人作嫁衣、白白消耗自己（体生用）。但由于你前期铺垫得好，到了最终大结局时，对方被你的真诚打动，或者环境回暖，双方最终达成了利益对等的完美和解，变成了平起平坐、互利共赢的伙伴关系（比和）。属于“前期广结善缘，后期广收福报”之象。'
+                line2: '先付出后收获的温情剧本。你的真诚最终打动环境，达成共赢。<br><br>' +
+                    '📈【投资金融】价值投资型，前期投入寂寞，后期回报稳定。<br>' +
+                    '💼【事业工作】前期帮别人铺路，后期获提拔或期权。<br>' +
+                    '🩺【健康求医】前期全面调理辛苦，后期根除隐患。<br>' +
+                    '❤️【感情人际】先单方面付出，后收获真心与平衡关系。<br>' +
+                    '🚗【日常出行】前期小插曲多，后期获超值回报。'
             };
         }
 
-        // ==========================================
-        // 4. 经典的转化型组合（好坏交织）
-        // ==========================================
+        // =========================================================================
+
+        // 第三档：转化博弈
+        // =========================================================================
         if (benRel === '用克体' && bianRel === '用生体') {
             return {
                 title: '【苦尽甘来】',
                 line1: '先逆后顺，迎刃而解；中途转机，贵人提携。',
-                line2: '开局阻力极大，甚至让你一度想放弃。但挺过眼前的难关过后，中途会迎来强烈的转机或有贵人出手相助，大结局非常圆满，甚至超出预期。'
+                line2: '逆风翻盘剧本！开局压力极大，挺过去后中途强力转机。<br><br>' +
+                    '📈【投资金融】开局回撤明显，勿在低点割肉，中后期资金与利好涌入。<br>' +
+                    '💼【事业工作】先遭打压，扛住后贵人提携。<br>' +
+                    '🩺【健康求医】初期吓人，后找到良方快速好转。<br>' +
+                    '❤️【感情人际】前期不顺，后突然开窍或遇良缘。<br>' +
+                    '🚗【日常出行】开局折腾，中途获帮助，结局惊喜。'
             };
         }
-        if (benRel === '用生体' && bianRel === '用克体') {
-            return {
-                title: '【虎头蛇尾】',
-                line1: '初时顺遂，切莫大意；防人掀桌，晚节不保。',
-                line2: '刚开始顺利得超乎想象，让你觉得闭着眼睛都能赢。但千万小心，最后关头容易发生变故，被人过河拆桥或遭遇逆转，一定要防范大意失荆州。'
-            };
-        }
+
         if (benRel === '体生用' && bianRel === '用生体') {
             return {
                 title: '【投桃报李】',
                 line1: '始虽奉献，终获厚报；投桃报李，舍得之间。',
-                line2: '这是一个“先付出、后收获”的幸运剧本。刚开始需要你投入较多的心力、资金或资源去铺垫（体生用），看起来有些吃亏。但你的付出绝不白费，大结局时会迎来强烈的回报与福报（用生体），属于财源回流、功不唐捐之象。'
+                line2: '功不唐捐格局。先主动让利，结局双倍回流。<br><br>' +
+                    '📈【投资金融】长线定投佳，前期舍得，后期主升浪。<br>' +
+                    '💼【事业工作】帮老板解决痛点，后获重用与回报。<br>' +
+                    '🩺【健康求医】先破后立，排毒后元气大补。<br>' +
+                    '❤️【感情人际】先真心付出，后收获加倍回应。<br>' +
+                    '🚗【日常出行】带诚意出门，收获远超预期。'
             };
         }
 
-        // ==========================================
-        // 5. 新增升级分支：【险中求胜】
-        // 涵盖：体生用➔体克用（你问的）、用生体➔体克用、比和➔体克用
-        // ==========================================
-        if (
-            (benRel === '体生用' && bianRel === '体克用') ||
-            (benRel === '用生体' && bianRel === '体克用') ||
-            (benRel === '比和' && bianRel === '体克用')
-        ) {
+        if (benRel === '体克用' && bianRel === '用生体') {
+            return {
+                title: '【先控后助】',
+                line1: '主动开局，善始善终；掌控之后，更得助力。',
+                line2: '高级控盘循环。你先强势破局，后外部力量主动来助。<br><br>' +
+                    '📈【投资金融】前期精准仓管，后期主力抬轿。<br>' +
+                    '💼【事业工作】先证明实力拿主导，后获资源倾斜。<br>' +
+                    '🩺【健康求医】前期自律治疗，后药物事半功倍。<br>' +
+                    '❤️【感情人际】你掌握主动，后期对方积极回应。<br>' +
+                    '🚗【日常出行】你当领头羊，中途获意外便利。'
+            };
+        }
+
+        // =========================================================================
+        // 第四档：辛苦与风险
+        // =========================================================================
+        if (benRel === '比和' && bianRel === '体克用') {
+            return {
+                title: '【和而后战】',
+                line1: '开局和谐，后需主动攻坚；先顺后苦，辛苦得成。',
+                line2: '有底气的辛苦胜局。开局基础好，后期需你亲自死磕。<br><br>' +
+                    '📈【投资金融】开局愉快，后进入洗盘期，需定力硬啃。<br>' +
+                    '💼【事业工作】合同顺利，落地执行需你加班攻坚。<br>' +
+                    '🩺【健康求医】基础不错，小毛病需自律治疗。<br>' +
+                    '❤️【感情人际】前期甜蜜，后期需共同面对现实考验。<br>' +
+                    '🚗【日常出行】前半程轻松，后半程需打起精神应对。'
+            };
+        }
+
+        if ((benRel === '体生用' && bianRel === '体克用') || (benRel === '用生体' && bianRel === '体克用')) {
             return {
                 title: '【险中求胜】',
                 line1: '虽有波折，仍需亲为；掌控全局，多劳多得。',
-                line2: '属于硬碰硬、凭实力咬牙拿下的格局。无论开局是轻松、相投还是处于消耗状态，最终收尾阶段都需要你亲自充当主角，耗费极大的个人心力和能量去主导、去死磕攻坚（变卦体克用）。好在主权在手，大结局确定能成，属于一分耕耘一分收获的辛苦胜局。'
+                line2: '硬仗格局。收尾需你全力主导，辛苦但可成。<br><br>' +
+                    '📈【投资金融】高风险高回报，需死盯盘面与严格纪律。<br>' +
+                    '💼【事业工作】总攻阶段突发多，需亲临一线攻坚。<br>' +
+                    '🩺【健康求医】进入攻坚期，需主动治疗虽苦但可根治。<br>' +
+                    '❤️【感情人际】需经历考验才能稳固关系。<br>' +
+                    '🚗【日常出行】波折不断，需不停协调解决麻烦。'
             };
         }
 
-        // ==========================================
-        // 6. 新增升级分支：【两败俱伤】（纯对抗局）
-        // 涵盖：用克体➔用克体、用克体➔体克用、体克用➔用克体
-        // ==========================================
-        if (
-            (benRel === '用克体' && bianRel === '用克体') ||
-            (benRel === '用克体' && bianRel === '体克用') ||
-            (benRel === '体克用' && bianRel === '用克体')
-        ) {
+        if (benRel === '用生体' && bianRel === '用克体') {
             return {
-                title: '【两败俱伤】',
-                line1: '针尖麦芒，内耗极强；龙争虎斗，两败俱伤。',
-                line2: '这件事情的发展磁场充满了强烈的对抗、挑剔与厮杀。你与环境、对手之间属于互不相让的状态。即便在某些阶段你能占据上风，长期的拉锯战也极易让你元气大伤。如果测竞争或对垒，属于需要付出惨痛代价、极其疲惫的“惨胜或两伤”之象。'
+                title: '【虎头蛇尾】',
+                line1: '初时顺遂，切莫大意；防人掀桌，晚节不保。',
+                line2: '高危组合。开头极顺，结局易剧变，务必留后手。<br><br>' +
+                    '📈【投资金融】诱多风险高，前期盈利诱人，后期易暴跌，建议落袋为安。<br>' +
+                    '💼【事业工作】开头顺利，收尾易被变卦，提前留法律一手。<br>' +
+                    '🩺【健康求医】前期缓解是假象，勿盲目停药防反弹。<br>' +
+                    '❤️【感情人际】开头甜蜜，后期易生变故。<br>' +
+                    '🚗【日常出行】前半程开心，后半程防违章或冲突。'
             };
         }
 
-        // ==========================================
-        // 7. 新增升级分支：【无底深渊】（纯失血局）
-        // 涵盖：体生用➔体生用、体生用➔用克体
-        // ==========================================
-        if (
-            (benRel === '体生用' && bianRel === '体生用') ||
-            (benRel === '体生用' && bianRel === '用克体')
-        ) {
+        // =========================================================================
+        // 第五档：消耗、内耗
+        // =========================================================================
+        if (benRel === '比和' && (bianRel === '体生用' || bianRel === '用克体')) {
+            return {
+                title: '【先顺后耗】',
+                line1: '开局投缘，后劲需防；守成不易，切勿松懈。',
+                line2: '前半场好、后半场需谨慎的格局。开局基础佳，但后期易消耗或压力，提前设止损点。<br><br>' +
+                    '📈【投资金融】开局顺，后期利润易被吞噬。<br>' +
+                    '💼【事业工作】前期和谐，落地后易预算超支或被加码。<br>' +
+                    '🩺【健康求医】目前无大碍，但潜伏内耗，勿拖延。<br>' +
+                    '❤️【感情人际】开头投缘，后期需持续经营防疲惫。<br>' +
+                    '🚗【日常出行】去时顺利，回程易遇麻烦，做足B计划。'
+            };
+        }
+
+        if ((benRel === '体生用' && bianRel === '体生用') || (benRel === '体生用' && bianRel === '用克体')) {
             return {
                 title: '【无底深渊】',
                 line1: '泥牛入海，前路茫茫；断尾求生，及早止损。',
-                line2: '占得此卦，能量磁场处于持续亏空状态。开局你就在单方面砸钱或贴精力（体生用），到了后期非但没有回流，反而可能继续深陷损耗或遭遇外部迎头痛击（变卦体生用/用克体）。做这件事如同泥牛入海，建议保持清醒，切莫盲目追加投入，必要时断尾求生。'
+                line2: '持续亏空凶局。建议立即止损，勿盲目追加。<br><br>' +
+                    '📈【投资金融】垃圾资产，尽快割肉保本。<br>' +
+                    '💼【事业工作】纯抽血项目，及早抽身。<br>' +
+                    '🩺【健康求医】元气透支，建议换方案深度调理。<br>' +
+                    '❤️【感情人际】单方面付出无回响，及时止损。<br>' +
+                    '🚗【日常出行】大忌，易损失或受阻，建议取消。'
             };
         }
 
-        // ==========================================
-        // 8. 新增升级分支：【竹篮打水】（其余结局泄气局）
-        // 涵盖：用生体➔体生用、用克体➔体生用、体克用➔体生用
-        // ==========================================
-        if (
-            (benRel === '用生体' && bianRel === '体生用') ||
+        if ((benRel === '用克体' && bianRel === '用克体') || (benRel === '用克体' && bianRel === '体克用') || (benRel === '体克用' && bianRel === '用克体')) {
+            return {
+                title: '【两败俱伤】',
+                line1: '针尖麦芒，内耗极强；龙争虎斗，两败俱伤。',
+                line2: '硬对抗凶局。长期拉锯伤身伤财，建议和解或退出。<br><br>' +
+                    '📈【投资金融】神仙打架，空仓观望为上。<br>' +
+                    '💼【事业工作】内卷严重，宜低调或换赛道。<br>' +
+                    '🩺【健康求医】炎症或旧疾爆发，需温和调和。<br>' +
+                    '❤️【感情人际】争执不断，建议冷静沟通。<br>' +
+                    '🚗【日常出行】易冲突或事故，能不出行则不出行。'
+            };
+        }
+
+        // =========================================================================
+        // 第六档：结局泄气
+        // =========================================================================
+        if ((benRel === '用生体' && bianRel === '体生用') ||
             (benRel === '用克体' && bianRel === '体生用') ||
-            (benRel === '体克用' && bianRel === '体生用')
-        ) {
+            (benRel === '体克用' && bianRel === '体生用')) {
             return {
                 title: '【竹篮打水】',
                 line1: '喧嚣散尽，为人作嫁；雷声大作，雨点全无。',
-                line2: '这个剧本最大的隐患在于“后劲不足”。无论开头看起来是得到关照、互相竞争还是你主动主导，到了最终收尾大结局时，你的成果、精力或主导权都会被对方悄然抽走或消耗殆尽（变卦体生用）。属于雷声大雨点小，最后为人作嫁衣、得不偿失。'
+                line2: '后劲不足格局。开头轰轰烈烈，结局成果易被抽走，得不偿失。<br><br>' +
+                    '📈【投资金融】看似热闹，最终难变现或利润流失。<br>' +
+                    '💼【事业工作】易为人作嫁，功劳被截胡。<br>' +
+                    '🩺【健康求医】看似好转实为透支，需静养补气。<br>' +
+                    '❤️【感情人际】付出多但难长久。<br>' +
+                    '🚗【日常出行】花钱买罪受，精神空虚。'
             };
         }
 
-        // ==========================================
-        // 9. 绝对保底兜底（防错机制）
-        // ==========================================
+        // 兜底
         return {
-            title: '【劳而无用】',
-            line1: '虚火一场，为人作嫁；精力耗尽，得不偿失。',
-            line2: '全局磁场波动较为低迷，当前所求之事阻力重重或内耗过甚。建议静待时机，不要盲目推进。'
+            title: '【劳而需慎】',
+            line1: '全局波动低迷，阻力与内耗并存。',
+            line2: '当前磁场低迷，盲目推进易加剧内耗，建议静待时机，积蓄力量后再谋进取。<br><br>' +
+                '📈【投资金融】多看少动，空仓防守为上。<br>' +
+                '💼【事业工作】宜低调准备，勿强出头。<br>' +
+                '🩺【健康求医】亚健康状态，慢养为主。<br>' +
+                '❤️【感情人际】沟通不畅，需耐心，避免急于定终身。<br>' +
+                '🚗【日常出行】平淡或有小麻烦，非必要建议居家。'
         };
     }
 
@@ -278,9 +394,34 @@
     function getMutualTrigrams(bits) {
         var arr = String(bits || '').split('');
         if (arr.length < 6) return { upper: null, lower: null };
-        var lowerBits = arr[4] + arr[3] + arr[2];
-        var upperBits = arr[3] + arr[2] + arr[1];
+        var lowerBits = arr[2] + arr[3] + arr[4];
+        var upperBits = arr[1] + arr[2] + arr[3];
         return { upper: upperBits, lower: lowerBits };
+    }
+
+    function findTrigramIndex(code) {
+        var target = String(code || '');
+        for (var i = 0; i < xt8guaData.length; i++) {
+            var entry = xt8guaData[i] || {};
+            if ((entry.code || '') === target || (entry.root || '') === target) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    function findHexagramByTrigrams(upCode, downCode) {
+        var upIndex = findTrigramIndex(upCode);
+        var downIndex = findTrigramIndex(downCode);
+        if (upIndex === null || downIndex === null || !window.zy64guaData) return null;
+        for (var i = 0; i < zy64guaData.length; i++) {
+            var entry = zy64guaData[i] || {};
+            var code = String(entry.code || '');
+            if (code.length >= 2 && code[0] === String(upIndex) && code[1] === String(downIndex)) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     function render(payload) {
@@ -291,24 +432,31 @@
             return;
         }
 
+        console.log('payload:', payload);
         var bits = (payload.upCode || '') + (payload.downCode || '');
+        var bianbits = (payload.bianUpCode || '') + (payload.bianDownCode || '');
         var changeYao = Number(payload.changeYao || 0);
         var bodyCode = '';
         var useCode = '';
+        var bianBodyCode = '';
+        var bianUseCode = '';
         if (changeYao >= 4) {
-            bodyCode = bits.slice(0, 3);
-            useCode = bits.slice(3, 6);
-        } else {
             bodyCode = bits.slice(3, 6);
+            bianBodyCode = bianbits.slice(3, 6);
             useCode = bits.slice(0, 3);
+            bianUseCode = bianbits.slice(0, 3);
+        } else {
+            bodyCode = bits.slice(0, 3);
+            bianBodyCode = bianbits.slice(0, 3);
+            useCode = bits.slice(3, 6);
+            bianUseCode = bianbits.slice(3, 6);
         }
 
         var bodyName = buildTrigramText(bodyCode, payload.upAlias || '');
         var useName = buildTrigramText(useCode, payload.downAlias || '');
         var benRel = getRelation(bodyName.replace(/（.*?）/g, ''), useName.replace(/（.*?）/g, ''));
 
-        var bianBodyCode = (payload.bianUpCode || '').slice(0, 3) || '';
-        var bianUseCode = (payload.bianDownCode || '').slice(0, 3) || '';
+
         var bianBodyName = buildTrigramText(bianBodyCode, payload.bianUpAlias || '');
         var bianUseName = buildTrigramText(bianUseCode, payload.bianDownAlias || '');
         var bianRel = getReverseRelation(bianBodyName.replace(/（.*?）/g, ''), bianUseName.replace(/（.*?）/g, ''));
@@ -316,26 +464,69 @@
         var mut = getMutualTrigrams(bits);
         var huUpName = buildTrigramText(mut.upper, '');
         var huDownName = buildTrigramText(mut.lower, '');
+        var huRel = getRelation(huUpName.replace(/（.*?）/g, ''), huDownName.replace(/（.*?）/g, ''))
+            .replace(/用/g, '下')
+            .replace(/体/g, '上');
 
+        var benHex = findHexagramByTrigrams(bodyCode, useCode);
+        var huHex = findHexagramByTrigrams(mut.upper, mut.lower);
+        var bianHex = findHexagramByTrigrams(bianBodyCode, bianUseCode);
         var duan = getDuanText(benRel, bianRel);
 
-        document.getElementById('panel-ben').innerHTML = [
-            '<div class="line"><span class="label">体卦</span>' + bodyName + '（五行：' + getElement(bodyName.replace(/（.*?）/g, '')) + '）</div>',
-            '<div class="line"><span class="label">用卦</span>' + useName + '（五行：' + getElement(useName.replace(/（.*?）/g, '')) + '）</div>',
-            '<div class="line"><span class="label">体用关系</span>' + benRel + '：' + getElement(bodyName.replace(/（.*?）/g, '')) + '与' + getElement(useName.replace(/（.*?）/g, '')) + '</div>',
-        ].join('');
+        function renderGuaSection(name1, name2, rel, hex) {
+            
+            var imgHtml = '';
+            if (hex && hex.img) {
+                imgHtml = '<div class="line"><span class="label">卦图</span><img src="' + hex.img + '" alt="' + (hex.name || '') + '" style="max-width:100%;height:auto;display:block;margin:8px 0 0;" /></div>';
+            }
+            return [
+                '<div class="line"><span class="label">体卦</span>' + name1 + '（五行：' + getElement(name1.replace(/（.*?）/g, '')) + '）</div>',
+                '<div class="line"><span class="label">用卦</span>' + name2 + '（五行：' + getElement(name2.replace(/（.*?）/g, '')) + '）</div>',
+                '<div class="line"><span class="label">体用关系</span>' + rel  + '</div>',
+                imgHtml
+            ].join('');
+        }
 
-        document.getElementById('panel-hu').innerHTML = [
-            '<div class="line"><span class="label">上卦</span>' + huUpName + '（五行：' + getElement(huUpName.replace(/（.*?）/g, '')) + '）</div>',
-            '<div class="line"><span class="label">下卦</span>' + huDownName + '（五行：' + getElement(huDownName.replace(/（.*?）/g, '')) + '）</div>',
-            // '<div class="line"><span class="label">公式</span>互卦下卦取本卦第二、第三、第四爻；互卦上卦取本卦第三、第四、第五爻。</div>'
-        ].join('');
+        function renderGuaSection2(name1, name2, rel, hex) {
+            
+            var imgHtml = '';
+            if (hex && hex.img) {
+                imgHtml = '<div class="line"><span class="label">卦图</span><img src="' + hex.img + '" alt="' + (hex.name || '') + '" style="max-width:100%;height:auto;display:block;margin:8px 0 0;" /></div>';
+            }
+            return [
+                '<div class="line"><span class="label">上卦</span>' + name1 + '（五行：' + getElement(name1.replace(/（.*?）/g, '')) + '）</div>',
+                '<div class="line"><span class="label">下卦</span>' + name2 + '（五行：' + getElement(name2.replace(/（.*?）/g, '')) + '）</div>',
+                '<div class="line"><span class="label">上下关系</span>' + rel  + '</div>',
+                imgHtml
+            ].join('');
+        }
 
-        document.getElementById('panel-bian').innerHTML = [
-            '<div class="line"><span class="label">体卦</span>' + bianBodyName + '（五行：' + getElement(bianBodyName.replace(/（.*?）/g, '')) + '）</div>',
-            '<div class="line"><span class="label">用卦</span>' + bianUseName + '（五行：' + getElement(bianUseName.replace(/（.*?）/g, '')) + '）</div>',
-            '<div class="line"><span class="label">体用关系</span>' + bianRel + '：' + getElement(bianBodyName.replace(/（.*?）/g, '')) + '与' + getElement(bianUseName.replace(/（.*?）/g, '')) + '</div>'
-        ].join('');
+        // document.getElementById('panel-ben').innerHTML = renderGuaSection('本卦', bodyCode, bodyName.replace(/（.*?）/g, ''), payload.upAlias || '', 'ben', benHex);
+        // document.getElementById('panel-hu').innerHTML = renderGuaSection('互卦', mut.upper + mut.lower, huUpName.replace(/（.*?）/g, '') + ' / ' + huDownName.replace(/（.*?）/g, ''), '', 'hu', huHex) +
+        //     '<div class="line"><span class="label">上下关系</span>' + huRel + '</div>';
+        // document.getElementById('panel-bian').innerHTML = renderGuaSection('变卦', bianBodyCode + bianUseCode, bianBodyName.replace(/（.*?）/g, ''), payload.bianUpAlias || '', 'bian', bianHex) +
+        //     '<div class="line"><span class="label">体用关系</span>' + bianRel + '</div>';
+
+        document.getElementById('panel-ben').innerHTML = renderGuaSection(
+            bodyName,
+            useName,
+            benRel,
+            benHex
+        );
+
+        document.getElementById('panel-hu').innerHTML = renderGuaSection2(
+            huUpName,
+            huDownName,
+            huRel,
+            huHex
+        );
+
+        document.getElementById('panel-bian').innerHTML = renderGuaSection(
+            bianBodyName,
+            bianUseName,
+            bianRel,
+            bianHex
+        );
 
         document.getElementById('panel-duan').innerHTML = [
             '<div class="title">' + duan.title + '</div>',
