@@ -503,8 +503,8 @@ function computeMeihuaIndices(di, extra) {
     var base = di.branchNumber + di.lunarMonth + di.lunarDay;
     extra = Number(extra) || 0;
     var upIndex = (base + extra) % 8; if (upIndex == 0) upIndex = 8;
-    var downIndex = (base + di.shichenNumber + extra) % 8; if (downIndex == 0) downIndex = 8;
-    var changeYao = (base + di.shichenNumber) % 6; if (changeYao == 0) changeYao = 6;
+    var downIndex = (base + di.shichenNumber) % 8; if (downIndex == 0) downIndex = 8;
+    var changeYao = (base + di.shichenNumber + extra) % 6; if (changeYao == 0) changeYao = 6;
     return { upIndex: upIndex, downIndex: downIndex, changeYao: changeYao };
 }
 
@@ -608,7 +608,8 @@ function buildMeihuaResult(di, upIndex, downIndex, changeYao, source) {
 function meihuaTianshi() {
     var now = new Date();
     var di = getDateInfo(now);
-    var indices = computeMeihuaIndices(di, di.milliseconds);
+    /*var indices = computeMeihuaIndices(di, di.milliseconds);*/
+    var indices = computeMeihuaIndices(di, 0);
     var dataObj = buildMeihuaResult(di, indices.upIndex, indices.downIndex, indices.changeYao, 'tianshi');
     try {
         localStorage.setItem('meihua_result', JSON.stringify(dataObj));
