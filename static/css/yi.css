@@ -23,7 +23,7 @@
 .yin .change {
     width: 10px;
     height: 12px;
-    background: #fff;
+    background: transparent;
     display: inline-block;
 }
 
@@ -575,9 +575,9 @@ footer {
 .yin64 .change {
     width: 10px;
     height: 12px;
-    background: #fff;
+    background: transparent;
     display: inline-block;
-    border: 0 solid #fff !important;
+    border: 0 solid transparent !important;
 }
 
 .yang64 .change {
