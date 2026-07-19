@@ -108,6 +108,33 @@
       gap: 14px;
       width: 100%;
     }
+    .gua-swipe-hint {
+      display: none;
+      order: 1;
+      text-align: center;
+      font-family: var(--font-brush);
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      color: #8a7a68;
+      margin: 0 0 -6px;
+    }
+    .gua-swipe-dots {
+      display: none;
+      order: 1;
+      justify-content: center;
+      gap: 8px;
+      margin: 4px 0 0;
+    }
+    .gua-swipe-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.15);
+    }
+    .gua-swipe-dots span.active {
+      background: #c9a227;
+      transform: scale(1.2);
+    }
 
     /* 卦卡内容 */
     .hex-name {
@@ -279,9 +306,31 @@
         padding: 12px;
         gap: 12px;
       }
-      .gua-row {
-        grid-template-columns: 1fr;
+      /* 本/互/变：左右滑动分页，避免上下堆叠错乱 */
+      .gua-swipe-hint {
+        display: block;
       }
+      .gua-swipe-dots {
+        display: flex;
+      }
+      .gua-row {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 4px 0 10px;
+        scrollbar-width: none;
+      }
+      .gua-row::-webkit-scrollbar { display: none; }
+      .gua-row .panel {
+        flex: 0 0 100%;
+        max-width: 100%;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        box-sizing: border-box;
+      }
+      /* 九维场景：手机仍尽量两列，过窄单列 */
       .duan-scenes {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -459,7 +508,11 @@
         <h3>解卦</h3>
         <div id="panel-duan"></div>
       </div>
-      <div class="gua-row">
+      <div class="gua-swipe-hint">← 左右滑动查看本卦 / 互卦 / 变卦 →</div>
+      <div class="gua-swipe-dots" id="duanGuaDots" aria-hidden="true">
+        <span class="active"></span><span></span><span></span>
+      </div>
+      <div class="gua-row" id="duanGuaSwipe">
         <div class="panel">
           <h3>本卦</h3>
           <div class="panel-stage">开始 · 体用</div>
@@ -544,6 +597,24 @@
           openImage(t.src);
         }
       });
+
+      // 三卦滑动指示点
+      (function () {
+        var track = document.getElementById('duanGuaSwipe');
+        var dots = document.querySelectorAll('#duanGuaDots span');
+        if (!track || !dots.length) return;
+        function updateDots() {
+          var w = track.clientWidth || 1;
+          var idx = Math.round(track.scrollLeft / w);
+          if (idx < 0) idx = 0;
+          if (idx > dots.length - 1) idx = dots.length - 1;
+          for (var i = 0; i < dots.length; i++) {
+            dots[i].className = i === idx ? 'active' : '';
+          }
+        }
+        track.addEventListener('scroll', updateDots, { passive: true });
+        window.addEventListener('resize', updateDots);
+      })();
     });
   </script>
 </body>

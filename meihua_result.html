@@ -337,38 +337,77 @@
         cursor: zoom-in;
       }
 
-      @media (max-width: 700px) {
-        .ben-bian-row,
-        .yao-section-head,
-        .yao-pair {
-          grid-template-columns: 1fr;
-        }
-        .gua-col {
-          border-radius: 12px;
-          border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-        .gua-col.img-only {
-          border-radius: 12px;
-          border: 1px solid rgba(0, 0, 0, 0.06);
-          margin-top: 8px;
-        }
-        .yao-section {
-          border: none;
-          background: transparent;
-          padding: 0;
-        }
-        .yao-pairs { padding: 0; }
-        .yao-section-head { padding: 0; }
-        .yao-pair { gap: 8px; }
-        .desc-box {
-          max-height: none;
-          min-height: 0;
-        }
+      /* 桌面：左右对照；手机：隐藏桌面布局，改用滑动卡片 */
+      .layout-desktop { display: block; }
+      .layout-mobile { display: none; }
+
+      .swipe-hint {
+        display: none;
+        text-align: center;
+        font-family: var(--font-brush);
+        font-size: 0.95rem;
+        letter-spacing: 0.12em;
+        color: #8a7a68;
+        margin: 12px 0 8px;
+      }
+      .swipe-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 10px 0 4px;
+      }
+      .swipe-dots span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.15);
+        transition: background 0.2s, transform 0.2s;
+      }
+      .swipe-dots span.active {
+        background: #c9a227;
+        transform: scale(1.2);
       }
 
-      @media (max-width: 600px) {
+      .gua-swipe {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding: 4px 2px 12px;
+        scrollbar-width: none;
+      }
+      .gua-swipe::-webkit-scrollbar { display: none; }
+
+      .gua-card {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        box-sizing: border-box;
+        padding: 14px 12px 16px;
+        border-radius: 14px;
+        background: rgba(255, 252, 248, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      }
+      .gua-card .desc-box {
+        max-height: none;
+        min-height: 0;
+      }
+      .gua-card .yao-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      @media (max-width: 768px) {
+        .layout-desktop { display: none !important; }
+        .layout-mobile { display: block !important; }
+        .swipe-hint { display: block; }
         .result-header h2 { font-size: 1.25rem; }
         .yao-item { grid-template-columns: 1fr; }
+        .meta-row { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -545,6 +584,44 @@
           return html;
         }
 
+        /** 手机端：整卡纵向内容（供左右滑动） */
+        function renderYaoListSolo(rows, hexBits, changeYao, isBen) {
+          if (!rows || !rows.length) return '<div class="no-data">无爻辞</div>';
+          var maxLen = rows.length;
+          var html = '<div class="yao-list">';
+          for (var fromTop = 0; fromTop < maxLen; fromTop++) {
+            var fromBottom = maxLen - 1 - fromTop;
+            html += renderOneYaoItem(rows, hexBits, fromBottom, changeYao, isBen);
+          }
+          html += '</div>';
+          return html;
+        }
+
+        function renderMobileCard(kindLabel, displayLabel, guaName, desc, rows, hexBits, img, changeYao, isBen) {
+          var html = '<article class="gua-card" data-panel="' + (isBen ? 'ben' : 'bian') + '">';
+          html += '<div class="gua-col-title">' + esc(kindLabel) + '</div>';
+          html += '<div class="gua-name-wrap">';
+          if (guaName) {
+            html += '<a href="javascript:void(0)" class="gua-name-link" data-gua-name="' + esc(guaName) + '" title="查看详细介绍">';
+            html += esc(displayLabel || guaName) + '</a>';
+          } else {
+            html += '<span>' + esc(displayLabel || '—') + '</span>';
+          }
+          html += '</div>';
+          html += '<div class="section-label">卦辞</div>';
+          if (desc) html += '<div class="desc-box">' + esc(desc) + '</div>';
+          else html += '<div class="desc-box no-data">暂无卦辞</div>';
+          html += '<div class="section-label">爻辞</div>';
+          html += renderYaoListSolo(rows, hexBits, changeYao, isBen);
+          if (img) {
+            html += '<div class="img-block" style="margin-top:14px;">';
+            html += '<img class="gua-img clickable-img" src="' + esc(img) + '" alt="' + esc(guaName || kindLabel) + '" loading="lazy" decoding="async">';
+            html += '</div>';
+          }
+          html += '</article>';
+          return html;
+        }
+
         var raw = localStorage.getItem('meihua_result');
         if (!raw) {
           document.getElementById('meihua_result').innerHTML = '<div class="no-data">没有找到结果数据。请从首页重新发起起卦。</div>';
@@ -651,7 +728,8 @@
         html += '　动爻：第 ' + esc(d.changeYao) + ' 爻</div>';
         html += '</div>';
 
-        html += '<div class="gua-board">';
+        // 桌面：左右对照（爻辞成对对齐）
+        html += '<div class="layout-desktop gua-board">';
         html += '<div class="ben-bian-row">';
         html += renderGuaHead('本卦', benLabel, d.foundBen, benDesc);
         html += renderGuaHead('变卦', bianLabel, d.foundBian, bianDesc);
@@ -662,6 +740,15 @@
         html += renderGuaImg(d.foundBian, '变卦', bianImg);
         html += '</div>';
         html += '</div>';
+
+        // 手机：整卡左右滑动（本卦 | 变卦）
+        html += '<div class="layout-mobile">';
+        html += '<div class="swipe-hint">← 左右滑动查看本卦 / 变卦 →</div>';
+        html += '<div class="swipe-dots" id="guaSwipeDots" aria-hidden="true"><span class="active"></span><span></span></div>';
+        html += '<div class="gua-swipe" id="guaSwipe">';
+        html += renderMobileCard('本卦', benLabel, d.foundBen, benDesc, benRows, benBits, benImg, d.changeYao, true);
+        html += renderMobileCard('变卦', bianLabel, d.foundBian, bianDesc, bianRows, bianBits, bianImg, d.changeYao, false);
+        html += '</div></div>';
 
         document.getElementById('meihua_result').innerHTML = html;
 
@@ -674,6 +761,24 @@
             if (n) openGuaIntroByName(n);
           });
         }
+
+        // 滑动指示点
+        (function () {
+          var track = document.getElementById('guaSwipe');
+          var dots = document.querySelectorAll('#guaSwipeDots span');
+          if (!track || !dots.length) return;
+          function updateDots() {
+            var w = track.clientWidth || 1;
+            var idx = Math.round(track.scrollLeft / w);
+            if (idx < 0) idx = 0;
+            if (idx > dots.length - 1) idx = dots.length - 1;
+            for (var i = 0; i < dots.length; i++) {
+              dots[i].className = i === idx ? 'active' : '';
+            }
+          }
+          track.addEventListener('scroll', updateDots, { passive: true });
+          window.addEventListener('resize', updateDots);
+        })();
 
         var duanBtn = document.getElementById('duanBtn');
         if (duanBtn) {
