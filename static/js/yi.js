@@ -279,14 +279,14 @@ function zy64gua() {
     if (el) el.innerHTML = html
 }
 
-// 生成六爻
+// 生成六爻（整卡可点，便于手机触控）
 function gua64(name, code, rows, imgsrc, idx) {
-    var html = "<div class='gua64'>"
+    var html = "<div class='gua64' role='button' tabindex='0' onclick='openGuaIntro(" + idx + ")' onkeydown='if(event.key===\"Enter\"||event.key===\" \"){event.preventDefault();openGuaIntro(" + idx + ")}'>"
     for (var i = 0; i < code.length; i++) {
         if (code[i] == 0) {
-            html += "<div class='yao64 yin64' title='" + rows[5-i] + "'>"
+            html += "<div class='yao64 yin64' title='" + (rows && rows[5 - i] ? rows[5 - i] : '') + "'>"
         } else {
-            html += "<div class='yao64 yang64' title='" + rows[5-i] + "'>"
+            html += "<div class='yao64 yang64' title='" + (rows && rows[5 - i] ? rows[5 - i] : '') + "'>"
         }
 
         html += "<div class='line64'></div>"+
@@ -295,8 +295,7 @@ function gua64(name, code, rows, imgsrc, idx) {
                 "</div>"
     }
 
-    // clicking the name opens guaintro.html with full gua data saved to localStorage
-    html += "<label class='name64'><a href='javascript:void(0);' onclick='openGuaIntro("+idx+")'>" + name + "</a></label>"+
+    html += "<span class='name64'>" + name + "</span>"+
             "</div>"
 
     return html
@@ -310,14 +309,18 @@ function openGuaIntro(idx) {
         var code = String(entry.code || '');
         var upIndex = (code.length >= 1) ? Number(code[0]) : null;
         var downIndex = (code.length >= 2) ? Number(code[1]) : null;
-        var upObj = (upIndex !== null && xt8guaData[upIndex]) ? xt8guaData[upIndex] : null;
-        var downObj = (downIndex !== null && xt8guaData[downIndex]) ? xt8guaData[downIndex] : null;
+        var upObj = (upIndex !== null && !isNaN(upIndex) && xt8guaData[upIndex]) ? xt8guaData[upIndex] : null;
+        var downObj = (downIndex !== null && !isNaN(downIndex) && xt8guaData[downIndex]) ? xt8guaData[downIndex] : null;
+        var upBits = upObj ? (upObj.code || upObj.root || '') : '';
+        var downBits = downObj ? (downObj.code || downObj.root || '') : '';
         var payload = {
             entry: entry,
+            listIndex: idx,
             upIndex: upIndex,
             downIndex: downIndex,
             upObj: upObj,
-            downObj: downObj
+            downObj: downObj,
+            hexBits: String(upBits).slice(0, 3) + String(downBits).slice(0, 3)
         };
         localStorage.setItem('gua_intro', JSON.stringify(payload));
         window.location.href = 'guaintro.html';

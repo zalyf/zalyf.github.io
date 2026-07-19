@@ -1,127 +1,679 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>起卦 结果</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/site.css">
     <link rel="stylesheet" href="./static/css/yi.css">
+    <link rel="stylesheet" href="./static/css/effects.css">
     <style>
-      body { background: #f3f3f3; color:#111; }
-      .result-wrap { max-width:1000px; margin:18px auto; padding:18px; background:#fff; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.08);} 
-      .result-header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
-      .yao-list div { margin-bottom:6px; padding:6px; border-radius:4px; }
-      .yao-list .highlight { background: #fffa8c; }
-      .no-data { color:#999; padding:12px; }
+      body { padding-bottom: 72px; }
+      .result-wrap {
+        max-width: 1000px;
+        margin: 12px auto 24px;
+        padding: 18px 16px 24px;
+        width: calc(100% - 20px);
+      }
+      .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .result-header h2 {
+        letter-spacing: 0.15em;
+        margin: 0;
+        font-size: clamp(1.35rem, 4.5vw, 1.7rem);
+      }
+      .result-meta {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        font-size: 14px;
+        color: #333;
+      }
+      .meta-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px 16px;
+        align-items: baseline;
+      }
+      .meta-row + .meta-row {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed rgba(0, 0, 0, 0.08);
+      }
+      .meta-item {
+        display: grid;
+        grid-template-columns: 3.2em 1fr;
+        gap: 4px 8px;
+        align-items: baseline;
+        min-width: 0;
+      }
+      .meta-item .lab {
+        font-family: var(--font-brush);
+        letter-spacing: 0.12em;
+        color: #6a5a48;
+        text-align: justify;
+        text-align-last: justify;
+        font-size: 0.95rem;
+      }
+      .meta-item .val {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em;
+        word-break: break-all;
+        color: #222;
+      }
+      .result-meta .line-strong {
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        font-family: var(--font-brush);
+        font-size: 1.08rem;
+        letter-spacing: 0.08em;
+        color: #2a2218;
+        line-height: 1.55;
+      }
+      @media (max-width: 560px) {
+        .meta-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .meta-item {
+          grid-template-columns: 3.2em 1fr;
+        }
+      }
+      .no-data { color: #999; padding: 12px; text-align: center; }
+
+      #duanBtn {
+        min-height: 44px;
+        padding: 10px 16px !important;
+        font-size: 1.05rem;
+        font-family: var(--font-brush);
+        letter-spacing: 0.1em;
+        touch-action: manipulation;
+        border: 0;
+        border-radius: 8px;
+        background: #0b72d6;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .gua-board {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .ben-bian-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: stretch;
+      }
+      .gua-col {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 14px 12px 12px;
+        border-radius: 12px 12px 0 0;
+        background: rgba(255, 252, 248, 0.72);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-bottom: none;
+        box-sizing: border-box;
+      }
+      .gua-col.img-only {
+        border-radius: 0 0 12px 12px;
+        border-top: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding-top: 8px;
+        padding-bottom: 14px;
+      }
+      .gua-col-title {
+        text-align: center;
+        font-family: var(--font-brush);
+        font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+        letter-spacing: 0.12em;
+        margin: 0 0 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        flex-shrink: 0;
+      }
+      .gua-name-wrap {
+        text-align: center;
+        margin-bottom: 8px;
+        min-height: 2.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .gua-name-link {
+        color: #1a4a7a;
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(26, 74, 122, 0.45);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        font-family: var(--font-brush);
+        font-size: clamp(1.05rem, 3.2vw, 1.2rem);
+        letter-spacing: 0.08em;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+      .gua-name-link:hover,
+      .gua-name-link:focus-visible {
+        color: #0b72d6;
+        border-bottom-style: solid;
+        outline: none;
+      }
+
+      .section-label {
+        font-family: var(--font-brush);
+        font-size: 1.08rem;
+        letter-spacing: 0.14em;
+        margin: 12px 0 8px;
+        color: #3a3028;
+        flex-shrink: 0;
+      }
+      .desc-box {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 252, 245, 0.95);
+        border: 1px solid rgba(180, 140, 60, 0.18);
+        font-size: 15px;
+        line-height: 1.75;
+        letter-spacing: 0.04em;
+        color: #222;
+        /* 卦辞长短不一：限高滚动，保证左右区块起点对齐 */
+        min-height: 4.5em;
+        max-height: 9.5em;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        word-break: break-word;
+        flex-shrink: 0;
+      }
+      .img-block {
+        flex-shrink: 0;
+      }
+
+      /* 爻辞：左右成对同一行，长文换行时整行同高 */
+      .yao-section {
+        margin-top: 0;
+        padding: 4px 0 4px;
+        background: rgba(255, 252, 248, 0.55);
+        border-left: 1px solid rgba(0, 0, 0, 0.06);
+        border-right: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .yao-section-head {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 0 12px;
+      }
+      .yao-section-head .section-label {
+        margin: 8px 0;
+      }
+      .yao-pairs {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 12px 8px;
+      }
+      .yao-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: stretch;
+      }
+      .yao-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4px 12px;
+        align-content: start;
+        align-items: start;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        min-width: 0;
+        height: 100%;
+        box-sizing: border-box;
+      }
+      .yao-item .yao-name {
+        font-family: var(--font-brush);
+        font-size: 1.05rem;
+        letter-spacing: 0.08em;
+        color: #4a3a28;
+        white-space: nowrap;
+      }
+      .yao-item .yao-text {
+        font-size: 15px;
+        line-height: 1.55;
+        color: #222;
+        word-break: break-word;
+      }
+      .yao-item .yao-bit {
+        grid-column: 1 / -1;
+        font-size: 12px;
+        color: #888;
+      }
+      /* 动爻/变爻：立体浮起，与其它爻区分 */
+      .yao-item.is-move {
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(165deg, #fffdf6 0%, #fff8e8 48%, #fff3d6 100%);
+        border: 1px solid rgba(200, 150, 40, 0.45);
+        border-radius: 12px;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.9) inset,
+          0 -1px 0 rgba(180, 120, 20, 0.08) inset,
+          0 4px 6px rgba(120, 80, 10, 0.06),
+          0 10px 22px rgba(160, 110, 20, 0.14),
+          0 2px 0 rgba(200, 150, 40, 0.2);
+        transform: translateY(-2px);
+      }
+      .yao-item.is-move::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: linear-gradient(180deg, #f0d060, #d4a017 50%, #c4920a);
+        box-shadow: 0 0 8px rgba(212, 160, 23, 0.45);
+      }
+      /* 整爻文字同色金黄（爻名 + 爻辞 + 标注） */
+      .yao-item.is-move .yao-name,
+      .yao-item.is-move .yao-text,
+      .yao-item.is-move .yao-bit {
+        color: #d4a017;
+      }
+      .yao-item.is-move .yao-name {
+        text-shadow: 0 0 8px rgba(255, 200, 40, 0.3);
+      }
+      /* 关键字高亮：吉淡金、凶淡红、无咎淡绿（含动爻内单独变色） */
+      .hl-ji {
+        color: #c9a227 !important;
+        font-weight: 600;
+        text-shadow: 0 0 6px rgba(255, 210, 80, 0.35);
+      }
+      .hl-xiong {
+        color: #d06060 !important;
+        font-weight: 600;
+        text-shadow: 0 0 6px rgba(220, 80, 80, 0.25);
+      }
+      .hl-wujiu {
+        color: #3a9a6a !important;
+        font-weight: 600;
+        text-shadow: 0 0 6px rgba(80, 180, 120, 0.28);
+      }
+      .yao-item.is-empty {
+        background: rgba(255, 255, 255, 0.4);
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .gua-img {
+        display: block;
+        max-width: min(70vw, 260px);
+        max-height: 42vh;
+        width: auto;
+        height: auto;
+        margin: 0 auto;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        cursor: zoom-in;
+      }
+
+      @media (max-width: 700px) {
+        .ben-bian-row,
+        .yao-section-head,
+        .yao-pair {
+          grid-template-columns: 1fr;
+        }
+        .gua-col {
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .gua-col.img-only {
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          margin-top: 8px;
+        }
+        .yao-section {
+          border: none;
+          background: transparent;
+          padding: 0;
+        }
+        .yao-pairs { padding: 0; }
+        .yao-section-head { padding: 0; }
+        .yao-pair { gap: 8px; }
+        .desc-box {
+          max-height: none;
+          min-height: 0;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .result-header h2 { font-size: 1.25rem; }
+        .yao-item { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
-    <div style="padding:12px;">
+    <div class="page-top" style="padding:12px 14px;">
       <a class="meihua-btn" href="index.html" id="backBtn">← 返回</a>
     </div>
 
-    <footer style="width:100%;padding:12px 16px;box-sizing:border-box;position:fixed;bottom:6px;left:0;display:flex;justify-content:center;gap:12px;align-items:center;">
-        <div style="color:gray;font-size:14px;">弘扬国学，科学算卦</div>
-        <a href="#" id="supportLink" style="color:#0077cc;text-decoration:none;margin-left:8px;">卦金随缘，感谢支持</a>
+    <footer class="site-footer-m">
+        <div class="tagline">弘扬国学，科学算卦</div>
+        <a href="#" id="supportLink">卦金随缘，感谢支持</a>
     </footer>
+    <script src="./static/js/site.js"></script>
+    <script src="./static/js/effects.js"></script>
+    <script src="./static/js/data.js"></script>
 
     <div id="meihua_result" class="result-wrap">
       <div class="no-data">正在加载结果...</div>
     </div>
 
     <script>
-      (function(){
+      (function () {
+        function esc(s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        }
+
+        function yaoName(bit, positionFromBottom) {
+          var isYang = String(bit) === '1';
+          var num = isYang ? '九' : '六';
+          if (positionFromBottom === 0) return '初' + num;
+          if (positionFromBottom === 5) return '上' + num;
+          var mid = ['二', '三', '四', '五'][positionFromBottom - 1] || '';
+          return num + mid;
+        }
+
+        function yaoNature(bit) {
+          return String(bit) === '1' ? '阳爻' : '阴爻';
+        }
+
+        function findEntryByName(name) {
+          if (!name || typeof zy64guaData === 'undefined') return null;
+          for (var i = 0; i < zy64guaData.length; i++) {
+            if (zy64guaData[i] && zy64guaData[i].name === name) {
+              return { entry: zy64guaData[i], index: i };
+            }
+          }
+          return null;
+        }
+
+        /** 打开 guaintro，与全卦列表同一套 localStorage 协议 */
+        function openGuaIntroByName(name) {
+          var found = findEntryByName(name);
+          if (!found) {
+            alert('未找到「' + name + '」的详细资料。');
+            return;
+          }
+          try {
+            var entry = found.entry;
+            var code = String(entry.code || '');
+            var upIndex = code.length >= 1 ? Number(code[0]) : null;
+            var downIndex = code.length >= 2 ? Number(code[1]) : null;
+            var upObj = (upIndex != null && xt8guaData[upIndex]) ? xt8guaData[upIndex] : null;
+            var downObj = (downIndex != null && xt8guaData[downIndex]) ? xt8guaData[downIndex] : null;
+            var upBits = upObj ? (upObj.code || upObj.root || '') : '';
+            var downBits = downObj ? (downObj.code || downObj.root || '') : '';
+            localStorage.setItem('gua_intro', JSON.stringify({
+              entry: entry,
+              listIndex: found.index,
+              upIndex: upIndex,
+              downIndex: downIndex,
+              upObj: upObj,
+              downObj: downObj,
+              hexBits: String(upBits).slice(0, 3) + String(downBits).slice(0, 3)
+            }));
+            window.location.href = 'guaintro.html';
+          } catch (e) {
+            alert('无法打开卦介绍：' + e.message);
+          }
+        }
+
+        /** 吉 / 凶 / 无咎 关键字着色（先转义再替换；先处理「无咎」） */
+        function highlightKeywords(txt) {
+          var s = esc(txt);
+          s = s.replace(/无咎/g, '<span class="hl-wujiu">无咎</span>');
+          s = s.replace(/吉/g, '<span class="hl-ji">吉</span>');
+          s = s.replace(/凶/g, '<span class="hl-xiong">凶</span>');
+          return s;
+        }
+
+        function renderOneYaoItem(rows, hexBits, fromBottom, changeYao, isBen) {
+          if (!rows || !rows.length) {
+            return '<div class="yao-item is-empty">无爻辞</div>';
+          }
+          var bits = String(hexBits || '');
+          var moveFromBottom = (changeYao != null && changeYao >= 1 && changeYao <= 6)
+            ? (changeYao - 1) : -1;
+          var bitIdx = bits.length ? (bits.length - 1 - fromBottom) : -1;
+          var bit = bitIdx >= 0 ? bits[bitIdx] : '';
+          var name = yaoName(bit || '0', fromBottom);
+          var isMove = fromBottom === moveFromBottom;
+          var txt = rows[fromBottom] || '';
+          var cls = 'yao-item' + (isMove ? ' is-move' : '');
+          var html = '<div class="' + cls + '">';
+          html += '<div class="yao-name">' + esc(name) + '</div>';
+          // 吉/凶/无咎关键字单独着色；动爻其余文字仍为金黄
+          html += '<div class="yao-text">' + highlightKeywords(txt) + '</div>';
+          var tag = bit !== '' ? yaoNature(bit) : '';
+          if (isMove) {
+            tag = (tag ? tag + ' · ' : '') + (isBen ? '动爻' : '所变之爻');
+          }
+          if (tag) html += '<div class="yao-bit">' + esc(tag) + '</div>';
+          html += '</div>';
+          return html;
+        }
+
+        /** 六爻成对横排：同一爻左右同高，长辞换行不会错位 */
+        function renderYaoPairs(benRows, bianRows, benBits, bianBits, changeYao) {
+          var maxLen = Math.max(
+            (benRows && benRows.length) || 0,
+            (bianRows && bianRows.length) || 0,
+            6
+          );
+          var html = '<div class="yao-section">';
+          html += '<div class="yao-section-head">';
+          html += '<div class="section-label">爻辞</div>';
+          html += '<div class="section-label">爻辞</div>';
+          html += '</div>';
+          html += '<div class="yao-pairs">';
+          // 上爻 → 初爻
+          for (var fromTop = 0; fromTop < maxLen; fromTop++) {
+            var fromBottom = maxLen - 1 - fromTop;
+            html += '<div class="yao-pair">';
+            html += renderOneYaoItem(benRows, benBits, fromBottom, changeYao, true);
+            html += renderOneYaoItem(bianRows, bianBits, fromBottom, changeYao, false);
+            html += '</div>';
+          }
+          html += '</div></div>';
+          return html;
+        }
+
+        function renderGuaHead(kindLabel, displayLabel, guaName, desc) {
+          var html = '<div class="gua-col">';
+          html += '<div class="gua-col-title">' + esc(kindLabel) + '</div>';
+          html += '<div class="gua-name-wrap">';
+          if (guaName) {
+            html += '<a href="javascript:void(0)" class="gua-name-link" data-gua-name="' + esc(guaName) + '" title="查看详细介绍">';
+            html += esc(displayLabel || guaName);
+            html += '</a>';
+          } else {
+            html += '<span class="gua-name-link" style="border:0;color:inherit;cursor:default;">' + esc(displayLabel || '—') + '</span>';
+          }
+          html += '</div>';
+          html += '<div class="section-label">卦辞</div>';
+          if (desc) html += '<div class="desc-box">' + esc(desc) + '</div>';
+          else html += '<div class="desc-box no-data" style="display:flex;align-items:center;justify-content:center;">暂无卦辞</div>';
+          html += '</div>';
+          return html;
+        }
+
+        function renderGuaImg(guaName, kindLabel, img) {
+          var html = '<div class="gua-col img-only">';
+          if (img) {
+            html += '<div class="img-block">';
+            html += '<img class="gua-img clickable-img" src="' + esc(img) + '" alt="' + esc(guaName || kindLabel) + '" loading="lazy" decoding="async">';
+            html += '</div>';
+          } else {
+            html += '<div class="no-data" style="padding:8px;">无图</div>';
+          }
+          html += '</div>';
+          return html;
+        }
+
         var raw = localStorage.getItem('meihua_result');
         if (!raw) {
-          document.getElementById('meihua_result').innerHTML = '<div class="no-data">没有找到结果数据。请从首页重新发起“梅花起卦”。</div>';
+          document.getElementById('meihua_result').innerHTML = '<div class="no-data">没有找到结果数据。请从首页重新发起起卦。</div>';
           return;
         }
 
+        var d;
         try {
-          var d = JSON.parse(raw);
-        } catch(e) {
+          d = JSON.parse(raw);
+        } catch (e) {
           document.getElementById('meihua_result').innerHTML = '<div class="no-data">结果数据解析失败。</div>';
           return;
         }
 
-        // build HTML similar to previous floating panel
         var title = '易卦 结果';
         if (d && d.source === 'zhanbu') title = '随机起卦 结果';
         else if (d && d.source === 'tianshi') title = '天时起卦 结果';
         else if (d && d.source === 'xinshi') title = '心事起卦 结果';
         else if (d && d.source === 'meihua') title = '梅花起卦 结果';
-        var html = '';
-        html += '<div class="result-header">';
-        html += '<h2>' + title + '</h2>';
-        html += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
-        html += '<div>科学算卦，心诚则灵</div>';
-        html += '<button id="duanBtn" type="button" style="padding:8px 12px;border:0;border-radius:6px;background:#0b72d6;color:#fff;cursor:pointer;">卦师解卦</button>';
-        html += '</div>';
-        html += '</div>';
-        html += '<div style="margin-top:4px;">公历：' + d.year + '-' + String(d.gregMonth).padStart(2,'0') + '-' + String(d.gregDay).padStart(2,'0') +' ,农历：' + String(d.lunarMonth).padStart(2,'0') + '-' + String(d.lunarDay).padStart(2,'0') +' ,干支：' + d.yearTG + '(' + d.branchNumber + '）'+ '</div>';
-        html += '<div style="margin-top:8px;">起卦时间：' + (d.timeHMS || '') + '　时辰：' + d.shichen + '（' + d.shichenNumber + '）</div>';
-        html += '<div style="margin-top:12px;font-weight:700;">上卦：' + (d.upName||'') + '（' + (d.upAlias||'') + '）　下卦：' + (d.downName||'') + '（' + (d.downAlias||'') + '）　动爻：第 ' + d.changeYao + ' 爻</div>';
 
-        // prepare labels for 本卦 / 变卦 — if upAlias equals downAlias, show as "foundX为downAlias"
         var upAlias = d.upAlias || '';
         var downAlias = d.downAlias || '';
         var benLabel = '';
         if (upAlias && downAlias && upAlias === downAlias) {
           benLabel = (d.foundBen || '') + '为' + downAlias;
         } else {
-          benLabel = upAlias + downAlias + '（' + (d.foundBen || '') + '）';
+          benLabel = (upAlias || '') + (downAlias || '') + (d.foundBen ? '（' + d.foundBen + '）' : '');
         }
         var bianAlias = d.bianAlias || '';
         var bianLabel = '';
         if (bianAlias && bianAlias.length >= 2 && bianAlias.charAt(0) === bianAlias.charAt(1)) {
           bianLabel = (d.foundBian || '') + '为' + bianAlias.charAt(0);
         } else {
-          bianLabel = (bianAlias || '') + '（' + (d.foundBian || '') + '）';
+          bianLabel = (bianAlias || '') + (d.foundBian ? '（' + d.foundBian + '）' : '');
         }
 
-        html += '<div style="display:flex;gap:16px;margin-top:12px;align-items:flex-start;">';
+        // 从 data.js 补全卦辞（及必要时的爻辞/图）
+        var benEntry = findEntryByName(d.foundBen);
+        var bianEntry = findEntryByName(d.foundBian);
+        var benDesc = benEntry && benEntry.entry.desc ? benEntry.entry.desc : '';
+        var bianDesc = bianEntry && bianEntry.entry.desc ? bianEntry.entry.desc : '';
+        var benRows = d.foundRows || (benEntry && benEntry.entry.rows) || null;
+        var bianRows = d.foundBianRows || (bianEntry && bianEntry.entry.rows) || null;
+        var benImg = d.foundImg || (benEntry && benEntry.entry.img) || '';
+        var bianImg = d.foundBianImg || (bianEntry && bianEntry.entry.img) || '';
 
-        // 本卦
-        html += '<div style="flex:1;">';
-        html += '<div style="font-weight:700;margin-bottom:8px;">本卦：' + benLabel + '</div>';
-        if (d.foundRows && d.foundRows.length) {
-          html += '<div class="yao-list">';
-          // foundRows stored as bottom->top; render top->bottom highlighting moving yao
-          var highlightIdxTop = 6 - d.changeYao; // 0-based from top
-          for (var r = 5; r >= 0; r--) {
-            var idxFromTop = 5 - r;
-            var txt = d.foundRows[r] || '';
-            var cls = (idxFromTop === highlightIdxTop) ? 'highlight' : '';
-            html += '<div class="' + cls + '">' + txt + '</div>';
+        var benBits = String(d.upCode || '') + String(d.downCode || '');
+        if (benBits.length < 6 && benEntry) {
+          // fallback from indices in entry.code via xt8guaData
+          var bc = String(benEntry.entry.code || '');
+          if (bc.length >= 2 && typeof xt8guaData !== 'undefined') {
+            var bu = xt8guaData[Number(bc[0])];
+            var bd = xt8guaData[Number(bc[1])];
+            benBits = ((bu && bu.code) || '') + ((bd && bd.code) || '');
           }
-          html += '</div>';
-        } else html += '<div class="no-data">无爻辞数据</div>';
-
-        if (d.foundImg) html += '<div style="margin-top:12px;"><img class="clickable-img" src="' + d.foundImg + '" style="display:block;max-width:40vw;max-height:60vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="本卦"></div>';
-        else html += '<div class="no-data">无图片</div>';
-        html += '</div>'; // end left
-
-        // 变卦
-        html += '<div style="flex:1;">';
-        html += '<div style="font-weight:700;margin-bottom:8px;">变卦：' + bianLabel + '</div>';
-        if (d.foundBianRows && d.foundBianRows.length) {
-          html += '<div class="yao-list">';
-          var highlightIdxTopB = 6 - d.changeYao;
-          for (var rb = 5; rb >= 0; rb--) {
-            var idxFromTopB = 5 - rb;
-            var txtb = d.foundBianRows[rb] || '';
-            var clsb = (idxFromTopB === highlightIdxTopB) ? 'highlight' : '';
-            html += '<div class="' + clsb + '">' + txtb + '</div>';
+        }
+        var bianBits = String(d.bianUpCode || '') + String(d.bianDownCode || '');
+        if (bianBits.length < 6 && bianEntry) {
+          var bc2 = String(bianEntry.entry.code || '');
+          if (bc2.length >= 2 && typeof xt8guaData !== 'undefined') {
+            var bu2 = xt8guaData[Number(bc2[0])];
+            var bd2 = xt8guaData[Number(bc2[1])];
+            bianBits = ((bu2 && bu2.code) || '') + ((bd2 && bd2.code) || '');
           }
-          html += '</div>';
-        } else html += '<div class="no-data">无爻辞数据</div>';
+        }
 
-        if (d.foundBianImg) html += '<div style="margin-top:12px;"><img class="clickable-img" src="' + d.foundBianImg + '" style="display:block;max-width:40vw;max-height:60vh;width:auto;height:auto;margin:0 auto;object-fit:contain;" alt="变卦"></div>';
-        else html += '<div class="no-data">无图片</div>';
-        html += '</div>'; // end right
+        var html = '';
+        html += '<div class="result-header">';
+        html += '<h2>' + esc(title) + '</h2>';
+        html += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+        html += '<div style="font-family:var(--font-brush);letter-spacing:0.08em;color:#555;">科学算卦，心诚则灵</div>';
+        html += '<button id="duanBtn" type="button">卦师解卦</button>';
+        html += '</div></div>';
 
-        html += '</div>'; // end flex
+        // 时间仅显示到秒，避免毫秒造成参差
+        var timeShow = String(d.timeHMS || '');
+        var timeParts = timeShow.split(':');
+        if (timeParts.length >= 3) {
+          timeShow = timeParts.slice(0, 3).map(function (p, i) {
+            return i < 3 ? String(p).padStart(2, '0') : p;
+          }).join(':');
+        }
+
+        html += '<div class="result-meta">';
+        html += '<div class="meta-row">';
+        html += '<div class="meta-item"><span class="lab">公历</span><span class="val">' +
+          esc(d.year) + '-' + String(d.gregMonth).padStart(2, '0') + '-' + String(d.gregDay).padStart(2, '0') +
+          '</span></div>';
+        html += '<div class="meta-item"><span class="lab">农历</span><span class="val">' +
+          String(d.lunarMonth).padStart(2, '0') + '-' + String(d.lunarDay).padStart(2, '0') +
+          '</span></div>';
+        html += '<div class="meta-item"><span class="lab">干支</span><span class="val">' +
+          esc(d.yearTG || '—') + '</span></div>';
+        html += '</div>';
+        html += '<div class="meta-row">';
+        html += '<div class="meta-item"><span class="lab">时间</span><span class="val">' +
+          esc(timeShow || '—') + '</span></div>';
+        html += '<div class="meta-item"><span class="lab">时辰</span><span class="val">' +
+          esc(d.shichen || '—') + '时</span></div>';
+        html += '<div class="meta-item" aria-hidden="true"></div>';
+        html += '</div>';
+        html += '<div class="line-strong">上卦：' + esc(d.upName || '') + (d.upAlias ? '（' + esc(d.upAlias) + '）' : '');
+        html += '　下卦：' + esc(d.downName || '') + (d.downAlias ? '（' + esc(d.downAlias) + '）' : '');
+        html += '　动爻：第 ' + esc(d.changeYao) + ' 爻</div>';
+        html += '</div>';
+
+        html += '<div class="gua-board">';
+        html += '<div class="ben-bian-row">';
+        html += renderGuaHead('本卦', benLabel, d.foundBen, benDesc);
+        html += renderGuaHead('变卦', bianLabel, d.foundBian, bianDesc);
+        html += '</div>';
+        html += renderYaoPairs(benRows, bianRows, benBits, bianBits, d.changeYao);
+        html += '<div class="ben-bian-row">';
+        html += renderGuaImg(d.foundBen, '本卦', benImg);
+        html += renderGuaImg(d.foundBian, '变卦', bianImg);
+        html += '</div>';
+        html += '</div>';
 
         document.getElementById('meihua_result').innerHTML = html;
+
+        // 卦名 → 详细介绍
+        var nameLinks = document.querySelectorAll('.gua-name-link');
+        for (var li = 0; li < nameLinks.length; li++) {
+          nameLinks[li].addEventListener('click', function (e) {
+            e.preventDefault();
+            var n = this.getAttribute('data-gua-name');
+            if (n) openGuaIntroByName(n);
+          });
+        }
 
         var duanBtn = document.getElementById('duanBtn');
         if (duanBtn) {
@@ -151,66 +703,111 @@
           });
         }
 
-        // cleanup stored data (optional) - keep a copy for back-navigation if needed
-        // localStorage.removeItem('meihua_result');
-
-        // back button also clears storage when clicked
-        document.getElementById('backBtn').addEventListener('click', function(){
-          try { localStorage.removeItem('meihua_result'); } catch(e){}
+        document.getElementById('backBtn').addEventListener('click', function () {
+          try { localStorage.removeItem('meihua_result'); } catch (e) {}
         });
 
-        // support modal: show random wei/zhi image
-        var supportImgs = ['static/images/wei.jpg','static/images/zhi.jpg'];
-        function openSupport(){
-          var idx = Math.floor(Math.random()*supportImgs.length);
+        var supportImgs = ['static/images/wei.jpg', 'static/images/zhi.jpg'];
+        function openSupport() {
+          var idx = Math.floor(Math.random() * supportImgs.length);
           var img = document.getElementById('supportImg');
           if (img) {
             img.src = supportImgs[idx];
             document.getElementById('supportModal').style.display = 'flex';
           }
         }
-        function closeSupport(){ var m = document.getElementById('supportModal'); if (m) m.style.display = 'none'; }
-        document.addEventListener('DOMContentLoaded', function(){
-          var link = document.getElementById('supportLink'); if (link) link.addEventListener('click', function(e){ e.preventDefault(); openSupport(); });
-          var closeBtn = document.getElementById('supportClose'); if (closeBtn) closeBtn.addEventListener('click', closeSupport);
-          var modal = document.getElementById('supportModal'); if (modal) modal.addEventListener('click', function(e){ if (e.target.id === 'supportModal') closeSupport(); });
+        function closeSupport() {
+          var m = document.getElementById('supportModal');
+          if (m) m.style.display = 'none';
+        }
+        function openImage(src) {
+          var m = document.getElementById('imageModal');
+          var im = document.getElementById('imageModalImg');
+          if (!m || !im) return;
+          im.src = src;
+          m.style.display = 'flex';
+        }
+        function closeImage() {
+          var m = document.getElementById('imageModal');
+          if (m) m.style.display = 'none';
+        }
 
-          // Image viewer modal: attach click handlers to images we just injected
-          function openImage(src){
-            var m = document.getElementById('imageModal');
-            var im = document.getElementById('imageModalImg');
-            if (!m || !im) return;
-            im.src = src;
-            m.style.display = 'flex';
-          }
-          function closeImage(){ var m = document.getElementById('imageModal'); if (m) m.style.display = 'none'; }
-
-          // attach close handler
-          var imgClose = document.getElementById('imageModalClose'); if (imgClose) imgClose.addEventListener('click', closeImage);
-          var imgModal = document.getElementById('imageModal'); if (imgModal) imgModal.addEventListener('click', function(e){ if (e.target.id === 'imageModal') closeImage(); });
-
-          // make clickable thumbnails open the image modal
+        document.addEventListener('DOMContentLoaded', function () {
+          var link = document.getElementById('supportLink');
+          if (link) link.addEventListener('click', function (e) { e.preventDefault(); openSupport(); });
+          var closeBtn = document.getElementById('supportClose');
+          if (closeBtn) closeBtn.addEventListener('click', closeSupport);
+          var modal = document.getElementById('supportModal');
+          if (modal) modal.addEventListener('click', function (e) {
+            if (e.target.id === 'supportModal') closeSupport();
+          });
+          var imgClose = document.getElementById('imageModalClose');
+          if (imgClose) imgClose.addEventListener('click', closeImage);
+          var imgModal = document.getElementById('imageModal');
+          if (imgModal) imgModal.addEventListener('click', function (e) {
+            if (e.target.id === 'imageModal') closeImage();
+          });
           var imgs = document.querySelectorAll('.clickable-img');
-          imgs.forEach(function(i){ i.style.cursor = 'zoom-in'; i.addEventListener('click', function(){ openImage(i.src || i.getAttribute('data-src')); }); });
+          for (var i = 0; i < imgs.length; i++) {
+            (function (node) {
+              node.addEventListener('click', function () { openImage(node.src); });
+            })(imgs[i]);
+          }
         });
 
+        // 若脚本在 DOMContentLoaded 之后执行，补绑图片
+        if (document.readyState !== 'loading') {
+          var imgs2 = document.querySelectorAll('.clickable-img');
+          for (var j = 0; j < imgs2.length; j++) {
+            (function (node) {
+              node.addEventListener('click', function () { openImage(node.src); });
+            })(imgs2[j]);
+          }
+          var link2 = document.getElementById('supportLink');
+          if (link2 && !link2._bound) {
+            link2._bound = true;
+            link2.addEventListener('click', function (e) { e.preventDefault(); openSupport(); });
+          }
+          var closeBtn2 = document.getElementById('supportClose');
+          if (closeBtn2 && !closeBtn2._bound) {
+            closeBtn2._bound = true;
+            closeBtn2.addEventListener('click', closeSupport);
+          }
+          var modal2 = document.getElementById('supportModal');
+          if (modal2 && !modal2._bound) {
+            modal2._bound = true;
+            modal2.addEventListener('click', function (e) {
+              if (e.target.id === 'supportModal') closeSupport();
+            });
+          }
+          var imgClose2 = document.getElementById('imageModalClose');
+          if (imgClose2 && !imgClose2._bound) {
+            imgClose2._bound = true;
+            imgClose2.addEventListener('click', closeImage);
+          }
+          var imgModal2 = document.getElementById('imageModal');
+          if (imgModal2 && !imgModal2._bound) {
+            imgModal2._bound = true;
+            imgModal2.addEventListener('click', function (e) {
+              if (e.target.id === 'imageModal') closeImage();
+            });
+          }
+        }
       })();
     </script>
 
-      <!-- Support modal -->
-      <div id="supportModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:12000;">
-        <div style="position:relative;background:#fff;border-radius:8px;padding:12px;max-width:720px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-          <button id="supportClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;cursor:pointer;">×</button>
-          <img id="supportImg" src="" alt="感谢支持" style="display:block;max-width:50%;height:auto;margin:0 auto;">
-        </div>
+    <div id="supportModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:12000;padding:16px;box-sizing:border-box;">
+      <div style="position:relative;background:#fff;border-radius:10px;padding:14px;max-width:720px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <button id="supportClose" type="button" aria-label="关闭" style="position:absolute;right:4px;top:2px;background:transparent;border:0;font-size:28px;line-height:1;cursor:pointer;width:44px;height:44px;">×</button>
+        <img id="supportImg" src="" alt="感谢支持" style="display:block;max-width:min(50%,280px);width:100%;height:auto;margin:0 auto;">
       </div>
+    </div>
 
-      <!-- Image viewer modal -->
-      <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;">
-        <div style="position:relative;background:transparent;border-radius:8px;padding:12px;max-width:90vw;width:90%;display:flex;align-items:center;justify-content:center;">
-          <button id="imageModalClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;color:#fff;cursor:pointer;">×</button>
-          <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;" />
-        </div>
+    <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;padding:16px;box-sizing:border-box;">
+      <div style="position:relative;max-width:95vw;max-height:90vh;">
+        <button id="imageModalClose" type="button" aria-label="关闭" style="position:absolute;right:-4px;top:-40px;background:transparent;border:0;color:#fff;font-size:32px;width:44px;height:44px;cursor:pointer;">×</button>
+        <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:85vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;">
       </div>
+    </div>
   </body>
 </html>

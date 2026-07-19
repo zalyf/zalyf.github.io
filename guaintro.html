@@ -1,95 +1,514 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>卦 介绍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/site.css">
     <link rel="stylesheet" href="./static/css/yi.css">
+    <link rel="stylesheet" href="./static/css/effects.css">
     <style>
-      body { background:#f3f3f3; color:#111; }
-      .wrap { max-width:900px; margin:18px auto; padding:18px; background:#fff; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.08);} 
-      .gua-img { display:block; max-width:40vw; max-height:60vh; width:auto; height:auto; margin:8px 0; object-fit:contain; }
-      .trigram { padding:8px; border:1px solid #eee; border-radius:6px; margin:6px 0; background:#fafafa }
-      pre { white-space:pre-wrap; word-break:break-word; background:#f8f8f8;padding:8px;border-radius:6px;border:1px solid #eee }
+      .wrap {
+        max-width: 920px;
+        margin: 12px auto 48px;
+        padding: 18px 16px 24px;
+        width: calc(100% - 20px);
+      }
+      .page-top { padding: 12px 14px; }
+
+      .intro-head {
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .intro-head h1 {
+        margin: 0 0 6px;
+        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        letter-spacing: 0.28em;
+        text-indent: 0.28em;
+      }
+      .intro-sub {
+        font-family: var(--font-brush);
+        font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+        letter-spacing: 0.12em;
+        color: rgba(40, 34, 28, 0.75);
+      }
+      .meta-chips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin: 12px 0 4px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.72);
+        border: 1px solid rgba(0,0,0,0.06);
+        font-size: 13px;
+        line-height: 1.3;
+        color: #333;
+      }
+      .chip strong {
+        font-family: var(--font-brush);
+        font-weight: 400;
+        margin-right: 4px;
+        letter-spacing: 0.06em;
+      }
+
+      .gua-img {
+        display: block;
+        max-width: min(70vw, 280px);
+        max-height: 48vh;
+        width: auto;
+        height: auto;
+        margin: 10px auto 6px;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        cursor: zoom-in;
+      }
+
+      .section {
+        margin-top: 18px;
+      }
+      .section-title {
+        font-family: var(--font-brush);
+        font-size: clamp(1.15rem, 4vw, 1.35rem);
+        letter-spacing: 0.16em;
+        margin: 0 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+      }
+
+      .desc-box {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 252, 245, 0.9);
+        border: 1px solid rgba(180, 140, 60, 0.18);
+        font-size: 16px;
+        line-height: 1.75;
+        letter-spacing: 0.04em;
+      }
+
+      /* 六爻示意 */
+      .hex-visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+        margin: 8px auto 4px;
+        padding: 14px 10px;
+        max-width: 220px;
+        background: rgba(255,255,255,0.55);
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+      .hex-visual .yao-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        font-size: 0;
+      }
+      .hex-visual .line {
+        width: 48px;
+        height: 12px;
+        background: #1a1a1a;
+        display: inline-block;
+        border-radius: 1px;
+      }
+      .hex-visual .yin .gap {
+        width: 12px;
+        height: 12px;
+        background: transparent;
+        display: inline-block;
+      }
+      .hex-visual .yang .gap {
+        width: 12px;
+        height: 12px;
+        background: #1a1a1a;
+        display: inline-block;
+      }
+
+      .trigram-visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        margin: 8px auto 10px;
+      }
+      .trigram-visual .yao-row { font-size: 0; }
+      .trigram-visual .line {
+        width: 36px;
+        height: 9px;
+        background: #1a1a1a;
+        display: inline-block;
+      }
+      .trigram-visual .yin .gap {
+        width: 9px; height: 9px; display: inline-block; background: transparent;
+      }
+      .trigram-visual .yang .gap {
+        width: 9px; height: 9px; display: inline-block; background: #1a1a1a;
+      }
+
+      .yao-list { margin-top: 4px; }
+      .yao-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px 12px;
+        align-items: start;
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background: rgba(255,255,255,0.78);
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+      .yao-item .yao-name {
+        font-family: var(--font-brush);
+        font-size: 1.05rem;
+        letter-spacing: 0.08em;
+        color: #4a3a28;
+        white-space: nowrap;
+        min-width: 2.8em;
+      }
+      .yao-item .yao-text {
+        font-size: 15px;
+        line-height: 1.55;
+        color: #222;
+      }
+      .yao-item .yao-bit {
+        grid-column: 1 / -1;
+        font-size: 12px;
+        color: #888;
+      }
+
+      .trigram-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 600px) {
+        .wrap { padding: 14px 12px 20px; }
+        .trigram-grid { grid-template-columns: 1fr; }
+        .yao-item { grid-template-columns: 1fr; gap: 4px; }
+      }
+
+      .trigram-card {
+        padding: 14px 12px;
+        border-radius: 12px;
+        background: rgba(250, 248, 244, 0.92);
+        border: 1px solid rgba(0,0,0,0.06);
+      }
+      .trigram-card h3 {
+        margin: 0 0 4px;
+        text-align: center;
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
+        text-indent: 0.2em;
+      }
+      .trigram-card .alias {
+        text-align: center;
+        font-family: var(--font-brush);
+        font-size: 1.05rem;
+        color: rgba(40,34,28,0.7);
+        margin-bottom: 6px;
+        letter-spacing: 0.12em;
+      }
+      .kv {
+        display: grid;
+        grid-template-columns: 5.5em 1fr;
+        gap: 6px 8px;
+        font-size: 14px;
+        line-height: 1.45;
+        margin-top: 8px;
+      }
+      .kv .k {
+        color: #6a5a48;
+        font-family: var(--font-brush);
+        letter-spacing: 0.06em;
+      }
+      .kv .v { color: #222; word-break: break-all; }
+
+      .compose-box {
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.65);
+        border: 1px dashed rgba(0,0,0,0.1);
+        font-family: var(--font-brush);
+        font-size: clamp(1.1rem, 3.8vw, 1.35rem);
+        letter-spacing: 0.12em;
+        line-height: 1.6;
+      }
+      .compose-box .arrow { opacity: 0.45; margin: 0 0.25em; }
+      .no-data { color: #999; padding: 10px 0; text-align: center; }
+      .bin {
+        font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+        letter-spacing: 0.08em;
+      }
     </style>
   </head>
   <body>
-    <div style="padding:12px;"><a class="meihua-btn" href="index.html">← 返回</a></div>
+    <div class="page-top">
+      <a class="meihua-btn" href="zy64gua.html">← 返回全卦</a>
+      <a class="meihua-btn" href="index.html" style="margin-left:8px;">首页</a>
+    </div>
     <div id="intro" class="wrap">正在加载卦信息…</div>
 
+    <script src="./static/js/site.js"></script>
+    <script src="./static/js/effects.js"></script>
+    <script src="./static/js/data.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function(){
-      (function(){
-        var raw = localStorage.getItem('gua_intro');
-        if (!raw) {
-          document.getElementById('intro').innerHTML = '<div style="color:#999">未找到卦信息。请从64卦列表中点击卦名查看。</div>';
-          return;
-        }
-        try {
-          var d = JSON.parse(raw);
-        } catch(e) {
-          document.getElementById('intro').innerHTML = '<div style="color:#999">卦数据解析失败。</div>';
-          return;
+      (function () {
+        function esc(s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
         }
 
-        var entry = d.entry || {};
-        var up = d.upObj || null;
-        var down = d.downObj || null;
+        /** 爻题：初九/六二/上九… positionFromBottom: 0=初 … 5=上 */
+        function yaoName(bit, positionFromBottom) {
+          var isYang = String(bit) === '1';
+          var num = isYang ? '九' : '六';
+          if (positionFromBottom === 0) return '初' + num;
+          if (positionFromBottom === 5) return '上' + num;
+          var mid = ['二', '三', '四', '五'][positionFromBottom - 1] || '';
+          return num + mid;
+        }
 
-        var html = '';
-        html += '<h2>' + (entry.name || '') + ' 详细介绍</h2>';
-        if (entry.img) html += '<img src="' + entry.img + '" class="gua-img clickable-img" alt="' + (entry.name||'') + '">';
-        // html += '<div style="margin-top:8px;">代码：' + (entry.code || '') + '</div>';
-        html += '<div style="margin-top:8px;font-weight:700;">爻辞：</div>';
-        if (entry.rows && entry.rows.length) {
-          html += '<div style="text-align:left;margin-top:6px;">';
-          for (var i = entry.rows.length - 1; i >= 0; i--) {
-            html += '<div style="padding:6px;border-radius:4px;margin-bottom:6px;background:#fff;border:1px solid #f0f0f0;">' + (entry.rows[i]||'') + '</div>';
+        function yaoNature(bit) {
+          return String(bit) === '1' ? '阳爻' : '阴爻';
+        }
+
+        /** bits: 从「上」到「下」的 0/1 字符串 */
+        function renderYaoStack(bits, classPrefix) {
+          classPrefix = classPrefix || 'hex-visual';
+          var html = '<div class="' + classPrefix + '">';
+          var s = String(bits || '');
+          for (var i = 0; i < s.length; i++) {
+            var isYang = s[i] === '1';
+            html += '<div class="yao-row ' + (isYang ? 'yang' : 'yin') + '">';
+            html += '<span class="line"></span><span class="gap"></span><span class="line"></span>';
+            html += '</div>';
           }
           html += '</div>';
-        } else html += '<div class="no-data">无爻辞</div>';
-
-        html += '<div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">';
-        html += '<div style="flex:1;min-width:220px;">';
-        html += '<div style="font-weight:700;margin-bottom:6px;">上卦信息</div>';
-        if (up) html += '<div class="trigram">名称：' + (up.name||'') + '　别名：' + (up.alias||'') + '<br>编码：' + (up.code||up.root||'') + '<br>位置：' + (up.order||'') + '</div>';
-        else html += '<div class="no-data">无上卦信息</div>';
-        html += '</div>';
-
-        html += '<div style="flex:1;min-width:220px;">';
-        html += '<div style="font-weight:700;margin-bottom:6px;">下卦信息</div>';
-        if (down) html += '<div class="trigram">名称：' + (down.name||'') + '　别名：' + (down.alias||'') + '<br>编码：' + (down.code||down.root||'') + '<br>位置：' + (down.order||'') + '</div>';
-        else html += '<div class="no-data">无下卦信息</div>';
-        html += '</div>';
-        html += '</div>';
-
-        // html += '<div style="margin-top:12px;"><div style="font-weight:700;margin-bottom:6px;">完整数据（JSON）</div><pre>' + JSON.stringify(entry, null, 2) + '</pre></div>';
-
-        document.getElementById('intro').innerHTML = html;
-
-        // Image viewer modal behavior: open clicked image in a modal
-        function openImage(src){
-          var m = document.getElementById('imageModal');
-          var im = document.getElementById('imageModalImg');
-          if (!m || !im) return;
-          im.src = src;
-          m.style.display = 'flex';
+          return html;
         }
-        function closeImage(){ var m = document.getElementById('imageModal'); if (m) m.style.display = 'none'; }
 
-        var imgClose = document.getElementById('imageModalClose'); if (imgClose) imgClose.addEventListener('click', closeImage);
-        var imgModal = document.getElementById('imageModal'); if (imgModal) imgModal.addEventListener('click', function(e){ if (e.target.id === 'imageModal') closeImage(); });
+        function resolvePayload(raw) {
+          var d = null;
+          try { d = JSON.parse(raw); } catch (e) { return null; }
+          if (!d) return null;
 
-        var imgs = document.querySelectorAll('.clickable-img');
-        imgs.forEach(function(i){ i.style.cursor = 'zoom-in'; i.addEventListener('click', function(){ openImage(i.src || i.getAttribute('data-src')); }); });
+          var entry = d.entry || null;
+          var upIndex = d.upIndex;
+          var downIndex = d.downIndex;
+
+          // 若只有 entry，用 code 重算上下卦
+          if (entry && (upIndex == null || downIndex == null)) {
+            var c = String(entry.code || '');
+            if (c.length >= 2) {
+              upIndex = Number(c[0]);
+              downIndex = Number(c[1]);
+            }
+          }
+
+          // 从全局 data 补全 entry（字段更全）
+          if (typeof zy64guaData !== 'undefined' && entry) {
+            for (var i = 0; i < zy64guaData.length; i++) {
+              var e = zy64guaData[i];
+              if (e && (e.name === entry.name || e.code === entry.code)) {
+                entry = e;
+                d.listIndex = i;
+                break;
+              }
+            }
+          }
+
+          var upObj = d.upObj || null;
+          var downObj = d.downObj || null;
+          if (typeof xt8guaData !== 'undefined') {
+            if (upIndex != null && xt8guaData[upIndex]) upObj = xt8guaData[upIndex];
+            if (downIndex != null && xt8guaData[downIndex]) downObj = xt8guaData[downIndex];
+          }
+
+          return {
+            entry: entry || {},
+            upIndex: upIndex,
+            downIndex: downIndex,
+            upObj: upObj,
+            downObj: downObj,
+            listIndex: d.listIndex
+          };
+        }
+
+        function buildHexBits(upObj, downObj) {
+          var up = (upObj && (upObj.code || upObj.root)) || '000';
+          var down = (downObj && (downObj.code || downObj.root)) || '000';
+          return String(up).slice(0, 3) + String(down).slice(0, 3);
+        }
+
+        function renderTrigramCard(title, obj) {
+          if (!obj) {
+            return '<div class="trigram-card"><h3>' + esc(title) + '</h3><div class="no-data">无数据</div></div>';
+          }
+          var bits = String(obj.code || obj.root || '');
+          var html = '<div class="trigram-card">';
+          html += '<h3>' + esc(title) + '</h3>';
+          html += '<div class="alias">' + esc(obj.name || '') + (obj.alias ? ' · ' + esc(obj.alias) : '') + '</div>';
+          html += renderYaoStack(bits, 'trigram-visual');
+          html += '<div class="kv">';
+          html += '<div class="k">卦名</div><div class="v">' + esc(obj.name || '—') + '</div>';
+          html += '<div class="k">取象</div><div class="v">' + esc(obj.alias || '—');
+          if (obj.name && obj.alias) html += '（' + esc(obj.name) + '为' + esc(obj.alias) + '）';
+          html += '</div>';
+          if (obj.order != null) {
+            html += '<div class="k">八卦序</div><div class="v">先天第 ' + esc(obj.order) + ' 卦</div>';
+          }
+          html += '<div class="k">先天方位</div><div class="v">' + esc(obj.pstcn || '—') + '</div>';
+          html += '<div class="k">后天方位</div><div class="v">' + esc(obj.psthtcn || '—') + '</div>';
+          html += '</div></div>';
+          return html;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var el = document.getElementById('intro');
+          var raw = localStorage.getItem('gua_intro');
+          if (!raw) {
+            el.innerHTML = '<div class="no-data">未找到卦信息。请从「易经全卦」列表中点击卦名查看。</div>';
+            return;
+          }
+
+          var d = resolvePayload(raw);
+          if (!d || !d.entry || !d.entry.name) {
+            el.innerHTML = '<div class="no-data">卦数据解析失败或内容为空。</div>';
+            return;
+          }
+
+          var entry = d.entry;
+          var up = d.upObj;
+          var down = d.downObj;
+          var hexBits = buildHexBits(up, down);
+          var upAlias = up ? (up.alias || up.name || '') : '';
+          var downAlias = down ? (down.alias || down.name || '') : '';
+          var composeName = '';
+          if (upAlias && downAlias) {
+            if (upAlias === downAlias) composeName = (entry.name || '') + '为' + downAlias;
+            else composeName = upAlias + downAlias + (entry.name ? '（' + entry.name + '）' : '');
+          }
+
+          document.title = (entry.name || '卦') + ' · 介绍';
+
+          var html = '';
+          html += '<div class="intro-head">';
+          html += '<h1>' + esc(entry.name || '') + '</h1>';
+          if (composeName) html += '<div class="intro-sub">' + esc(composeName) + '</div>';
+          html += '</div>';
+
+          html += '<div class="meta-chips">';
+          if (up) html += '<span class="chip"><strong>上卦</strong>' + esc(up.name) + (up.alias ? '（' + esc(up.alias) + '）' : '') + '</span>';
+          if (down) html += '<span class="chip"><strong>下卦</strong>' + esc(down.name) + (down.alias ? '（' + esc(down.alias) + '）' : '') + '</span>';
+          html += '</div>';
+
+          if (entry.img) {
+            html += '<img src="' + esc(entry.img) + '" class="gua-img clickable-img" alt="' + esc(entry.name || '') + '" loading="lazy" decoding="async">';
+          }
+
+          // 卦辞
+          html += '<div class="section">';
+          html += '<h2 class="section-title">卦辞</h2>';
+          if (entry.desc) html += '<div class="desc-box">' + esc(entry.desc) + '</div>';
+          else html += '<div class="no-data">暂无卦辞数据</div>';
+          html += '</div>';
+
+          // 六爻示意
+          html += '<div class="section">';
+          html += '<h2 class="section-title">卦象</h2>';
+          html += renderYaoStack(hexBits, 'hex-visual');
+          html += '<div class="compose-box">';
+          html += esc(up ? (up.name + '（' + (up.alias || '') + '）') : '上卦');
+          html += '<span class="arrow">上</span> + ';
+          html += esc(down ? (down.name + '（' + (down.alias || '') + '）') : '下卦');
+          html += '<span class="arrow">下</span><br>';
+          html += '→ ' + esc(entry.name || '');
+          html += '</div>';
+          html += '</div>';
+
+          // 爻辞（上→下展示，与卦象一致）
+          html += '<div class="section">';
+          html += '<h2 class="section-title">爻辞</h2>';
+          if (entry.rows && entry.rows.length) {
+            html += '<div class="yao-list">';
+            // rows[0]=初爻(底), rows[5]=上爻(顶)；hexBits[0]=顶, hexBits[5]=底
+            for (var r = entry.rows.length - 1; r >= 0; r--) {
+              var fromBottom = r;
+              var bitIdx = hexBits.length ? (hexBits.length - 1 - fromBottom) : -1;
+              var bit = bitIdx >= 0 ? hexBits[bitIdx] : '';
+              var name = yaoName(bit || '0', fromBottom);
+              html += '<div class="yao-item">';
+              html += '<div class="yao-name">' + esc(name) + '</div>';
+              html += '<div class="yao-text">' + esc(entry.rows[r] || '') + '</div>';
+              if (bit !== '') {
+                html += '<div class="yao-bit">' + yaoNature(bit) + '</div>';
+              }
+              html += '</div>';
+            }
+            html += '</div>';
+          } else {
+            html += '<div class="no-data">无爻辞</div>';
+          }
+          html += '</div>';
+
+          // 上下卦
+          html += '<div class="section">';
+          html += '<h2 class="section-title">上下卦</h2>';
+          html += '<div class="trigram-grid">';
+          html += renderTrigramCard('上卦', up);
+          html += renderTrigramCard('下卦', down);
+          html += '</div>';
+          html += '</div>';
+
+          el.innerHTML = html;
+
+          // 图片灯箱
+          function openImage(src) {
+            var m = document.getElementById('imageModal');
+            var im = document.getElementById('imageModalImg');
+            if (!m || !im) return;
+            im.src = src;
+            m.style.display = 'flex';
+          }
+          function closeImage() {
+            var m = document.getElementById('imageModal');
+            if (m) m.style.display = 'none';
+          }
+          var imgClose = document.getElementById('imageModalClose');
+          if (imgClose) imgClose.addEventListener('click', closeImage);
+          var imgModal = document.getElementById('imageModal');
+          if (imgModal) imgModal.addEventListener('click', function (e) {
+            if (e.target.id === 'imageModal') closeImage();
+          });
+          var imgs = document.querySelectorAll('.clickable-img');
+          for (var i = 0; i < imgs.length; i++) {
+            (function (node) {
+              node.addEventListener('click', function () { openImage(node.src); });
+            })(imgs[i]);
+          }
+        });
       })();
-      });
     </script>
-    <!-- Image viewer modal -->
-    <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;">
-      <div style="position:relative;background:transparent;border-radius:8px;padding:12px;max-width:90vw;width:90%;display:flex;align-items:center;justify-content:center;">
-        <button id="imageModalClose" style="position:absolute;right:8px;top:6px;background:transparent;border:0;font-size:28px;line-height:1;color:#fff;cursor:pointer;">×</button>
-        <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;" />
+
+    <div id="imageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:13000;padding:16px;box-sizing:border-box;">
+      <div style="position:relative;max-width:95vw;max-height:90vh;">
+        <button id="imageModalClose" type="button" aria-label="关闭" style="position:absolute;right:-4px;top:-40px;background:transparent;border:0;color:#fff;font-size:32px;width:44px;height:44px;cursor:pointer;">×</button>
+        <img id="imageModalImg" src="" alt="查看图片" style="max-width:95vw;max-height:85vh;width:auto;height:auto;object-fit:contain;display:block;margin:0 auto;">
       </div>
     </div>
   </body>

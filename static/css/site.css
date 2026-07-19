@@ -1,0 +1,241 @@
+/**
+ * 全站公共样式：背景、字体、移动端适配
+ * 各页面引入顺序建议：site.css → yi.css → effects.css → 页面内联
+ */
+
+/* ——— Google 书法体（页面需引入 fonts link）——— */
+:root {
+  --font-ui: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-brush: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", "楷体", "DFKai-SB", serif;
+  --ink: rgba(22, 18, 14, 0.9);
+  --ink-soft: rgba(40, 34, 28, 0.78);
+  --paper: #f6f3ee;
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --panel-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  --touch-min: 44px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  /* 轻量纸色占位，site.js 再换 R.jpg */
+  background-color: var(--paper);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60"><rect width="100%" height="100%" fill="%23efece6"/><rect x="0" y="40" width="100%" height="20" fill="%23e0d7cc"/></svg>');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding-bottom: var(--safe-bottom);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.06);
+}
+
+body.site-bg-ready {
+  background-attachment: fixed;
+}
+
+/* 全站毛笔字：标题 / 导航 / 页脚 / 主操作 */
+h1, h2, h3, h4,
+.site-title,
+.page-title,
+.zy64-header .title,
+.title,
+.meihua-btn,
+.site-footer,
+.site-footer a,
+.site-footer .tagline,
+.site-footer-m,
+.site-footer-m a,
+.brush,
+.btn-brush,
+.btn-row a,
+.zhanbu-motto .motto-line {
+  font-family: var(--font-brush);
+  font-weight: 400;
+}
+
+h1, h2, h3 {
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+a, button {
+  touch-action: manipulation;
+}
+
+/* 返回 / 导航按钮 */
+.meihua-btn,
+.site-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  padding: 8px 16px;
+  font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(28, 26, 24, 0.72);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.meihua-btn:active,
+.site-nav-btn:active {
+  transform: scale(0.98);
+  opacity: 0.92;
+}
+
+/* 内容卡片：半透明，透出全站背景 */
+.site-panel,
+.wrap,
+.result-wrap,
+.panel {
+  background: var(--panel-bg);
+  border-radius: 12px;
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* duan 页网格容器：不要套卡片底 */
+.page > .wrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+}
+
+/* 页脚（全站可复用） */
+.site-footer,
+.site-footer-m {
+  width: 100%;
+  padding: 8px 12px calc(10px + var(--safe-bottom));
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  align-items: center;
+  background: linear-gradient(transparent, rgba(246, 243, 238, 0.55));
+  z-index: 20;
+  font-size: clamp(1.05rem, 3.8vw, 1.3rem);
+  letter-spacing: 0.12em;
+}
+
+.site-footer .tagline,
+.site-footer-m .tagline,
+.site-footer-m > div {
+  color: var(--ink-soft);
+  font-family: var(--font-brush);
+}
+
+.site-footer a,
+.site-footer-m a {
+  color: rgba(30, 70, 120, 0.9);
+  text-decoration: none;
+  font-family: var(--font-brush);
+  padding: 4px 2px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-footer a:hover,
+.site-footer-m a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 顶栏通用 */
+.page-top,
+.zy64-header {
+  padding-top: max(12px, var(--safe-top));
+}
+
+.zy64-header {
+  background: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 表单：防 iOS 缩放，触控友好 */
+input, select, textarea {
+  font-size: 16px;
+  max-width: 100%;
+  font-family: var(--font-ui);
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+  min-height: var(--touch-min);
+  font-family: var(--font-brush);
+  letter-spacing: 0.1em;
+  touch-action: manipulation;
+}
+
+/* 图片在手机上不溢出 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ——— 移动端 ——— */
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .wrap,
+  .result-wrap,
+  .site-panel {
+    width: calc(100% - 20px);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 14px 12px;
+  }
+
+  h1 { font-size: 1.45rem; }
+  h2 { font-size: 1.28rem; }
+  h3 { font-size: 1.12rem; }
+
+  .site-footer,
+  .site-footer-m {
+    font-size: 1.05rem;
+    gap: 4px 12px;
+  }
+}
+
+/* 固定背景在 iOS 上有时失效，降级滚动 */
+@supports (-webkit-touch-callout: none) {
+  body {
+    background-attachment: scroll;
+  }
+}

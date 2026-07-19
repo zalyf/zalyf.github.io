@@ -6,7 +6,7 @@ var xt8guaData = [
     {name: "兑", alias: "泽", tag: "d", pstxt: "southeast", pstcn: "东南", pstht: "west", psthtcn: "西", code: "011", order: 2},        
     {name: "艮", alias: "山", tag: "g", pstxt: "northwest", pstcn: "西北", pstht: "northeast", psthtcn: "东北", code: "100", order: 7}, 
 
-    {name: "巺", alias: "风", tag: "x", pstxt: "southwest", pstcn: "西南", pstht: "southeast", psthtcn: "东南", code: "110", order: 5}, 
+    {name: "巽", alias: "风", tag: "x", pstxt: "southwest", pstcn: "西南", pstht: "southeast", psthtcn: "东南", code: "110", order: 5}, 
     {name: "震", alias: "雷", tag: "z", pstxt: "northeast", pstcn: "东北", pstht: "east", psthtcn: "东北", code: "001", order: 4},      
 
     {name: "离", alias: "火", tag: "l", pstxt: "east", pstcn: "东", pstht: "south", psthtcn: "南", code: "101", order: 3},              
@@ -27,7 +27,7 @@ var zy64guaData = [
             "飞龙在天 利见大人",
             "亢龙 有悔"
         ],
-        img: "static/images/qian.png"
+        img: "static/images/qian.jpg"
     },
     {
         name: "坤",
@@ -49,14 +49,14 @@ var zy64guaData = [
         code: "75",
         desc: "元亨利贞 勿用有攸往 利建侯",
         rows: [
-            "盘桓 利居贞 利建候",
-            "屯如 遣如 乘马班如 匪寇婚媾 女子贞不字 十年乃字",
+            "盘桓 利居贞 利建侯",
+            "屯如邅如 乘马班如 匪寇婚媾 女子贞不字 十年乃字",
             "即鹿无虞 惟入于林中 君子几 不如舍 往吝",
             "乘马班如 求婚媾 往吉 无不利",
-            "屯其膏 小 贞吉 大 贞吉",
+            "屯其膏 小贞吉 大贞凶",
             "乘马班如 泣血涟如"
         ],
-        img: "static/images/zhun.png"
+        img: "static/images/zhun.jpg"
     },
     {
         name: "蒙",
@@ -70,7 +70,7 @@ var zy64guaData = [
             "童蒙 吉",
             "击蒙 不利为寇 利御寇"
         ],
-        img: "static/images/meng.png"
+        img: "static/images/meng.jpg"
     },
 
     {
@@ -85,7 +85,7 @@ var zy64guaData = [
             "需于酒食 贞吉",
             "入于穴 有不速之客三人来 敬之终吉"
         ],
-        img: "static/images/xu.png"
+        img: "static/images/xu.jpg"
     },
     {
         name: "讼",
@@ -94,12 +94,12 @@ var zy64guaData = [
         rows: [
             "不永所事 小有言 终吉",
             "不克讼 归而逋 其邑人三百户 无眚",
-            "食旧德 贞厉 终吉 或從王事 无成",
+            "食旧德 贞厉 终吉 或从王事 无成",
             "不克讼 复既命渝 安贞吉",
             "讼 元吉",
             "或锡之鞶带 终朝三褫之"
         ],
-        img: "static/images/song.png"
+        img: "static/images/song.jpg"
     },
 
     {
@@ -108,13 +108,13 @@ var zy64guaData = [
         desc: "贞丈人吉 无咎",
         rows: [
             "师出以律 否臧凶",
-            "在师中吉 无咎 天三锡命",
+            "在师中 吉 无咎 王三锡命",
             "师或舆尸 凶",
             "师左次 无咎",
             "田有禽 利执言 无咎 长子帅师 弟子舆尸 贞凶",
             "大君有命 开国承家 小人勿用"
         ],
-        img: "static/images/shi.png"
+        img: "static/images/shi.jpg"
     },
     {
         name: "比",
@@ -128,7 +128,7 @@ var zy64guaData = [
             "显比 王用三驱 失前禽 邑人不诫 吉",
             "比之无首 凶"
         ],
-        img: "static/images/bi.png"
+        img: "static/images/bi.jpg"
     },
     
     {
@@ -143,7 +143,7 @@ var zy64guaData = [
             "有孚挛如 富以其邻",
             "既雨既处 尚德载 妇贞厉 月几望 君子征凶"
         ],
-        img: "static/images/xiaoxu.png"
+        img: "static/images/xiaoxu.jpg"
     },
     {
         name: "履",
@@ -157,7 +157,7 @@ var zy64guaData = [
             "夬履 贞厉",
             "视履考祥 其旋元吉"
         ],
-        img: "static/images/lu.png"
+        img: "static/images/lu.jpg"
     },
 
     {
@@ -172,7 +172,7 @@ var zy64guaData = [
             "帝乙归妹 以祉元吉",
             "城复于隍 勿用师 自邑告命 贞吝"
         ],
-        img: "static/images/tai.png"
+        img: "static/images/tai.jpg"
     },
     {
         name: "否",
@@ -186,7 +186,7 @@ var zy64guaData = [
             "休否 大人吉 其亡其亡 系于包桑",
             "倾否 先否后喜"
         ],
-        img: "static/images/pi.png"
+        img: "static/images/pi.jpg"
     },
 
     {
@@ -197,25 +197,25 @@ var zy64guaData = [
             "同人于门 无咎",
             "同人于宗 吝",
             "伏戎于莽 升其高陵 三岁不兴",
-            "乘其墉 弗克攻 吉主",
+            "乘其墉 弗克攻 吉",
             "同人先号咷而后笑 大师克 相遇",
             "同人于郊 无悔"
         ],
-        img: "static/images/tongren.png"
+        img: "static/images/tongren.jpg"
     },
     {
         name: "大有",
         code: "60",
         desc: "元亨",
         rows: [
-            "无交害匪咎 艰则无咎",
+            "无交害 匪咎 艰则无咎",
             "大车以载 有攸往 无咎",
             "公用亨于天子 小人弗克",
             "匪其彭 无咎",
             "厥孚交如威如 吉",
-            "自天佑之 吉 无不利"
+            "自天祐之 吉 无不利"
         ],
-        img: "static/images/dayou.png"
+        img: "static/images/dayou.jpg"
     },
     {
         name: "谦",
@@ -225,11 +225,11 @@ var zy64guaData = [
             "谦谦君子 用涉大川 吉",
             "鸣谦 贞吉",
             "劳谦君子 有终 吉",
-            "无不利 捴谦",
+            "无不利 撎谦",
             "不富以其邻 利用侵伐 无不利",
             "鸣谦 利用行师征邑国"
         ],
-        img: "static/images/qian1.png"
+        img: "static/images/qian1.jpg"
     },
     {
         name: "豫",
@@ -243,7 +243,7 @@ var zy64guaData = [
             "贞疾 恒不死",
             "冥豫 成有渝 无咎"
         ],
-        img: "static/images/yu.png"
+        img: "static/images/yu.jpg"
     },
 
     {
@@ -258,7 +258,7 @@ var zy64guaData = [
             "孚于嘉 吉",
             "拘系之 乃从维之 王用亨于西山"
         ],
-        img: "static/images/sui.png"
+        img: "static/images/sui.jpg"
     },
     {
         name: "蛊",
@@ -272,7 +272,7 @@ var zy64guaData = [
             "干父之蛊 用誉",
             "不事王侯 高尚其事"
         ],
-        img: "static/images/gu.png"
+        img: "static/images/gu.jpg"
     },
 
     {
@@ -287,21 +287,21 @@ var zy64guaData = [
             "知临 大君之宜 吉",
             "敦临 吉 无咎"
         ],
-        img: "static/images/lin.png"
+        img: "static/images/lin.jpg"
     },
     {
         name: "观",
         code: "41",
         desc: "盥而不荐 有孚顒若",
         rows: [
-            "童观 小人无咎 君子咎",
+            "童观 小人无咎 君子吝",
             "窥观 利女贞",
             "观我生 进退",
             "观国之光 利用宾于王",
             "观我生 君子无咎",
             "观其生 君子无咎"
         ],
-        img: "static/images/guan.png"
+        img: "static/images/guan.jpg"
     },
 
     {
@@ -313,10 +313,10 @@ var zy64guaData = [
             "噬肤灭鼻 无咎",
             "噬腊肉遇毒 小吝 无咎",
             "噬乾胏 得金矢 利艰贞 吉",
-            "噬干肉得黄金 贞厉 无咎",
+            "噬乾肉 得黄金 贞厉 无咎",
             "何校灭耳 凶"
         ],
-        img: "static/images/shike.png"
+        img: "static/images/shike.jpg"
     },
     {
         name: "贲",
@@ -328,9 +328,9 @@ var zy64guaData = [
             "贲如 濡如 永贞吉",
             "贲如皤如 白马翰如 匪寇 婚媾",
             "贲于丘园 束帛戋戋 吝 终吉",
-            "自贲 无咎"
+            "白贲 无咎"
         ],
-        img: "static/images/ben.png"
+        img: "static/images/ben.jpg"
     },
 
     {
@@ -345,7 +345,7 @@ var zy64guaData = [
             "贯鱼以宫人宠 无不利",
             "硕果不食 君子得舆 小人剥庐"
         ],
-        img: "static/images/bo.png"
+        img: "static/images/bo.jpg"
     },
     {
         name: "复",
@@ -357,9 +357,9 @@ var zy64guaData = [
             "频复 厉 无咎",
             "中行独复",
             "敦复 无悔",
-            "迷复 凶灾眚 用行师 终有大败 以其国君凶 至于十年不克征 "
+            "迷复 凶 有灾眚 用行师 终有大败 以其国君凶 至于十年不克征"
         ],
-        img: "static/images/fu.png"
+        img: "static/images/fu.jpg"
     },
 
     {
@@ -367,28 +367,28 @@ var zy64guaData = [
         code: "05",
         desc: "元亨 利贞 其匪正有眚 不利有攸往",
         rows: [
-            "无妄往 吉",
-            "不耕获 不菑畲 则利用有望",
+            "无妄 往 吉",
+            "不耕获 不菑畲 则利有攸往",
             "无妄之灾 或系之牛 行人之得 邑人之灾",
             "可贞 无咎",
             "无妄之疾 勿药有喜",
-            "无妄行 有眚 无攸利"
+            "无妄 行有眚 无攸利"
         ],
-        img: "static/images/wuwang.png"
+        img: "static/images/wuwang.jpg"
     },
     {
         name: "大畜",
         code: "30",
         desc: "利贞 不家食吉 利涉大川",
         rows: [
-            "有厉 利己",
+            "有厉 利已",
             "舆说輹",
             "良马逐 利艰贞 曰闲舆卫 利有攸往",
             "童牛之牿 元吉",
             "豮豕之牙 吉",
             "何天之衢 亨"
         ],
-        img: "static/images/daxu.png"
+        img: "static/images/daxu.jpg"
     },
 
     {
@@ -403,21 +403,21 @@ var zy64guaData = [
             "拂经 居贞吉 不可涉大川",
             "由颐 厉 吉 利涉大川"
         ],
-        img: "static/images/yi.png"
+        img: "static/images/yi.jpg"
     },
     {
         name: "大过",
         code: "24",
-        desc: "栋挠 利有攸往 亨",
+        desc: "栋桡 利有攸往 亨",
         rows: [
             "藉用白茅 无咎",
             "枯杨生稊 老夫得其女妻 无不利",
             "栋桡 凶",
-            "栋隆 吉 有它 吝",
+            "栋隆 吉 有它吝",
             "枯杨生华 老妇得其士夫 无咎无誉",
             "过涉灭顶 凶 无咎"
         ],
-        img: "static/images/daguo.png"
+        img: "static/images/daguo.jpg"
     },
 
     {
@@ -425,14 +425,14 @@ var zy64guaData = [
         code: "77",
         desc: "有孚维心 亨 行有尚",
         rows: [
-            "习坎 入于坎 窞 凶",
-            "坎有险 求小德",
-            "来之坎 坎险且枕 入于坎 窞 勿用",
-            "樽酒簋贰用缶 纳约自牖 终无咎",
+            "习坎 入于坎窞 凶",
+            "坎有险 求小得",
+            "来之坎坎 险且枕 入于坎窞 勿用",
+            "樽酒簋贰 用缶 纳约自牖 终无咎",
             "坎不盈 祗既平 无咎",
-            "系用徽纆 窴于丛棘 三岁不得 凶"
+            "系用徽纆 寘于丛棘 三岁不得 凶"
         ],
-        img: "static/images/kan.png"
+        img: "static/images/kan.jpg"
     },
     {
         name: "离",
@@ -446,7 +446,7 @@ var zy64guaData = [
             "出涕沱若 戚嗟若 吉",
             "王用出征 有嘉折首 获匪其丑 无咎"
         ],
-        img: "static/images/li.png"
+        img: "static/images/li.jpg"
     },
 
     {
@@ -457,11 +457,11 @@ var zy64guaData = [
             "咸其拇",
             "咸其腓 凶 居吉",
             "咸其股 执其随 往吝",
-            "贞吉 悔亡 憧憧往来 朋從尔思",
+            "贞吉 悔亡 憧憧往来 朋从尔思",
             "咸其脢 无悔",
-            "限期附加"
+            "咸其辅 颊舌"
         ],
-        img: "static/images/xian.png"
+        img: "static/images/xian.jpg"
     },
     {
         name: "恒",
@@ -475,7 +475,7 @@ var zy64guaData = [
             "恒其德 贞 妇人吉 夫子凶",
             "振恒 凶"
         ],
-        img: "static/images/heng.png"
+        img: "static/images/heng.jpg"
     },
 
     {
@@ -490,7 +490,7 @@ var zy64guaData = [
             "嘉遁 贞吉",
             "肥遁 无不利"
         ],
-        img: "static/images/dun.png"
+        img: "static/images/dun.jpg"
     },
     {
         name: "大壮",
@@ -504,7 +504,7 @@ var zy64guaData = [
             "丧羊于易 无悔",
             "羝羊触藩 不能退 不能遂 无攸利 艰则吉"
         ],
-        img: "static/images/dazhuang.png"
+        img: "static/images/dazhuang.jpg"
     },
 
     {
@@ -513,27 +513,27 @@ var zy64guaData = [
         desc: "康侯用锡马蕃庶 昼日三接",
         rows: [
             "晋如摧如 贞吉 罔孚 裕无咎",
-            "晋如 愁如 贞吉 受兹介福于 其王母",
+            "晋如愁如 贞吉 受兹介福于其王母",
             "众允 悔亡",
             "晋如鼫鼠 贞厉",
             "悔亡 失得 勿恤 往吉 无不利",
             "晋其角 维用伐邑 厉吉 无咎 贞吝"
         ],
-        img: "static/images/jin.png"
+        img: "static/images/jin.jpg"
     },
     {
         name: "明夷",
         code: "16",
         desc: "利艰贞",
         rows: [
-            "明夷 于飞垂其翼 君子于行 三日不食 有攸往 主人有言",
-            "明夷夷于左股 用拯马壮 吉",
+            "明夷于飞 垂其翼 君子于行 三日不食 有攸往 主人有言",
+            "明夷 夷于左股 用拯马壮 吉",
             "明夷于南狩 得其大首 不可疾贞",
             "入于左腹 获明夷之心 于出门庭",
             "箕子之明夷 利贞",
-            "不明 晦 初登于天 后入于地"
+            "不明晦 初登于天 后入于地"
         ],
-        img: "static/images/mingyi.png"
+        img: "static/images/mingyi.jpg"
     },
 
     {
@@ -542,13 +542,13 @@ var zy64guaData = [
         desc: "利女贞",
         rows: [
             "闲有家 悔亡",
-            "无忧遂 在中馈 贞吉",
+            "无攸遂 在中馈 贞吉",
             "家人嗃嗃 悔 厉 吉 妇子嘻嘻 终吝",
             "富家 大吉",
             "王假有家 勿恤 吉",
             "有孚 威如 终吉"
         ],
-        img: "static/images/jiaren.png"
+        img: "static/images/jiaren.jpg"
     },
     {
         name: "睽",
@@ -559,25 +559,25 @@ var zy64guaData = [
             "遇主于巷 无咎",
             "见舆曳 其牛掣 其人天且劓 无初有终",
             "睽孤 遇元夫 交孚 厉 无咎",
-            "悔亡 厥宗噬夫 往何咎",
+            "悔亡 厥宗噬肤 往何咎",
             "睽孤 见豕负涂 载鬼一车 先张之弧 后说之弧 匪寇 婚媾 往遇雨则吉"
         ],
-        img: "static/images/kui.png"
+        img: "static/images/kui.jpg"
     },
 
     {
         name: "蹇",
         code: "73",
-        desc: "利西南，不利东北。利见大人，贞吉",
+        desc: "利西南 不利东北 利见大人 贞吉",
         rows: [
             "往蹇来誉",
-            "王臣蹇蹇，匪躬之故",
+            "王臣蹇蹇 匪躬之故",
             "往蹇来反",
             "往蹇来连",
-            "大蹇，朋来",
-            "往蹇来硕，吉。利见大人"
+            "大蹇朋来",
+            "往蹇来硕 吉 利见大人"
         ],
-        img: "static/images/jian.png"
+        img: "static/images/jian.jpg"
     },
     {
         name: "解",
@@ -591,7 +591,7 @@ var zy64guaData = [
             "君子维有解，吉，有孚于小人",
             "公用射隼于高墉之上，获之无不利"
         ],
-        img: "static/images/jie.png"
+        img: "static/images/jie.jpg"
     },
 
     {
@@ -606,7 +606,7 @@ var zy64guaData = [
             "或益之十朋之龟，弗克违。元吉",
             "弗损，益之，无咎，贞吉，利有攸往，得臣无家"
         ],
-        img: "static/images/sun.png"
+        img: "static/images/sun.jpg"
     },
     {
         name: "益",
@@ -620,7 +620,7 @@ var zy64guaData = [
             "有孚惠心，勿问元吉。有孚惠我德",
             "莫益之，或击之，立心勿恒，凶"
         ],
-        img: "static/images/yi4.png"
+        img: "static/images/yi4.jpg"
     },
 
     {
@@ -635,21 +635,21 @@ var zy64guaData = [
             "苋陆夬夬，中行无咎",
             "无号，终有凶"
         ],
-        img: "static/images/que.png"
+        img: "static/images/que.jpg"
     },
     {
         name: "姤",
         code: "04",
         desc: "女壮，勿用取女",
         rows: [
-            "系于金柅，贞吉。有攸往，见凶， 羸豕踟躅",
+            "系于金柅 贞吉 有攸往 见凶 羸豕孚蹢躅",
             "包有鱼，无咎，不利宾",
             "臀无肤，其行次且，厉，无大咎",
             "包无鱼，起凶",
             "以杞包瓜，含章，有陨自天",
             "姤其角，吝，无咎"
         ],
-        img: "static/images/gou.png"
+        img: "static/images/gou.jpg"
     },
 
     {
@@ -664,7 +664,7 @@ var zy64guaData = [
             "萃有位，无咎。匪孚，元永贞，悔亡",
             "赍咨涕洟，无咎"
         ],
-        img: "static/images/cui.png"
+        img: "static/images/cui.jpg"
     },
     {
         name: "升",
@@ -678,7 +678,7 @@ var zy64guaData = [
             "贞吉，升阶",
             "冥升，利于不息之贞"
         ],
-        img: "static/images/sheng.png"
+        img: "static/images/sheng.jpg"
     },
 
     {
@@ -693,7 +693,7 @@ var zy64guaData = [
             "劓刖，困于赤绂，乃徐有说，利用祭祀",
             "困于葛藟，于臲卼，曰动悔。有悔，征吉"
         ],
-        img: "static/images/kun.png"
+        img: "static/images/kun.jpg"
     },
     {
         name: "井",
@@ -707,7 +707,7 @@ var zy64guaData = [
             "井冽寒泉，食",
             "井收勿幕，有孚元吉"
         ],
-        img: "static/images/jing.png"
+        img: "static/images/jing.jpg"
     },
 
     {
@@ -722,7 +722,7 @@ var zy64guaData = [
             "大人虎变，未占有孚",
             "君子豹变，小人革面，征凶，居贞吉"
         ],
-        img: "static/images/ge.png"
+        img: "static/images/ge.jpg"
     },
     {
         name: "鼎",
@@ -736,7 +736,7 @@ var zy64guaData = [
             "鼎黄耳金铉，利贞",
             "鼎玉铉，大吉，无不利"
         ],
-        img: "static/images/ding.png"
+        img: "static/images/ding.jpg"
     },
 
     {
@@ -745,13 +745,13 @@ var zy64guaData = [
         desc: "亨。震来虩虩，笑言哑哑。震惊百里，不丧匕鬯",
         rows: [
             "震来虩虩，后笑言哑哑，吉",
-            "震来厉，亿丧贝，跻于九陵，勿逐，七日得",
+            "震来厉 亿丧贝 跻于九陵 勿逐 七日得",
             "震苏苏，震行无眚",
             "震遂泥",
             "震往来厉，亿无丧，有事",
             "震索索，视矍矍，征凶。震不于其躬，于其邻，无咎。婚媾有言"
         ],
-        img: "static/images/zhen.png"
+        img: "static/images/zhen.jpg"
     },
     {
         name: "艮",
@@ -765,7 +765,7 @@ var zy64guaData = [
             "艮其辅，言有序，悔亡",
             "敦艮，吉"
         ],
-        img: "static/images/gen.png"
+        img: "static/images/gen.jpg"
     },
 
     {
@@ -773,15 +773,14 @@ var zy64guaData = [
         code: "43",
         desc: "女归吉，利贞",
         rows: [
-            "鸿渐于干，小子厉，有言，无咎",
-            "鸿渐于磐，饮食衍衍，吉",
-            "鸿渐于陆。夫征不复，妇孕不育，凶。利御寇",
-            "鸿渐于木，或得其桷，无咎",
-            "鸿渐于陵，妇三岁不孕，终莫之胜，吉",
-            "鸿渐于逵，其羽可用为仪，吉",
-            ""
+            "鸿渐于干 小子厉 有言 无咎",
+            "鸿渐于磐 饮食衎衎 吉",
+            "鸿渐于陆 夫征不复 妇孕不育 凶 利御寇",
+            "鸿渐于木 或得其桷 无咎",
+            "鸿渐于陵 妇三岁不孕 终莫之胜 吉",
+            "鸿渐于陆 其羽可用为仪 吉"
         ],
-        img: "static/images/jian.png"
+        img: "static/images/jian4.jpg"
     },
     {
         name: "归妹",
@@ -795,7 +794,7 @@ var zy64guaData = [
             "帝乙归妹，其君之袂不如其娣之袂良，月几望，吉",
             "女承筐无实，士刲羊无血，无攸利"
         ],
-        img: "static/images/guimei.png"
+        img: "static/images/guimei.jpg"
     },
 
     {
@@ -803,14 +802,14 @@ var zy64guaData = [
         code: "56",
         desc: "亨。王假之，勿忧，宜日中",
         rows: [
-            "遇其配主，虽旬无咎，往有尚",
-            "丰其蔀，日中见斗。往得疑疾，有孚发若，吉",
-            "丰其沛，日中见昧，折其右肱，无咎",
-            "丰其蔀，日中见斗，遇其夷主，吉",
-            "来章，有庆誉，吉",
-            "丰其屋，蔀其家，窥其户，阒其无人，三岁不觌，凶"
+            "遇其配主 虽旬无咎 往有尚",
+            "丰其蔀 日中见斗 往得疑疾 有孚发若 吉",
+            "丰其沛 日中见沫 折其右肱 无咎",
+            "丰其蔀 日中见斗 遇其夷主 吉",
+            "来章 有庆誉 吉",
+            "丰其屋 蔀其家 窥其户 阒其无人 三岁不觌 凶"
         ],
-        img: "static/images/feng.png"
+        img: "static/images/feng.jpg"
     },
     {
         name: "旅",
@@ -818,13 +817,13 @@ var zy64guaData = [
         desc: "小亨，旅贞吉",
         rows: [
             "旅琐琐，斯其所取灾",
-            "旅即次，怀其资，得童仆，贞",
+            "旅即次 怀其资 得童仆贞",
             "旅焚其次，丧其童仆，贞厉",
             "旅于处，得其资斧，我心不快",
             "射雉，一矢亡，终以誉命",
             "鸟焚其巢，旅人先笑后号咷。丧牛于易，凶"
         ],
-        img: "static/images/lv.png"
+        img: "static/images/lv.jpg"
     },
 
     {
@@ -839,21 +838,21 @@ var zy64guaData = [
             "贞吉，悔亡，无不利。无初有终。先庚三日，后庚三日，吉",
             "巽在床下，丧其资斧，贞凶"
         ],
-        img: "static/images/xun.png"
+        img: "static/images/xun.jpg"
     },
     {
         name: "兑",
         code: "22",
         desc: "亨，利贞",
         rows: [
-            "和兑，吉",
-            "孚兑，吉，悔亡",
-            "来兑，凶",
-            "商未宁，介疾有喜",
-            "孚于剥，有厉",
+            "和兑 吉",
+            "孚兑 吉 悔亡",
+            "来兑 凶",
+            "商兑未宁 介疾有喜",
+            "孚于剥 有厉",
             "引兑"
         ],
-        img: "static/images/dui.png"
+        img: "static/images/dui.jpg"
     },
 
     {
@@ -865,24 +864,24 @@ var zy64guaData = [
             "涣奔其机，悔亡",
             "涣其躬，无悔",
             "涣其群，元吉。涣有丘，匪夷所思",
-            "涣汗，其大号涣，王居，无咎",
-            "涣其血，去逖出，无咎"
+            "涣汗其大号 涣王居 无咎",
+            "涣其血 去逖出 无咎"
         ],
-        img: "static/images/huan.png"
+        img: "static/images/huan.jpg"
     },
     {
         name: "节",
         code: "72",
-        desc: "亨。苦节不可贞",
+        desc: "亨 苦节不可贞",
         rows: [
-            "不出户庭，无咎",
-            "不出门庭，凶",
-            "不节若，则嗟若，无咎",
-            "安节，亨",
-            "甘节，吉，往有尚",
-            "苦节，贞凶，悔亡"
+            "不出户庭 无咎",
+            "不出门庭 凶",
+            "不节若 则嗟若 无咎",
+            "安节 亨",
+            "甘节 吉 往有尚",
+            "苦节 贞凶 悔亡"
         ],
-        img: "static/images/jie.png"
+        img: "static/images/jie2.jpg"
     },
 
     {
@@ -897,7 +896,7 @@ var zy64guaData = [
             "有孚挛如，无咎",
             "翰音登于天，贞凶"
         ],
-        img: "static/images/zhongfu.png"
+        img: "static/images/zhongfu.jpg"
     },
     {
         name: "小过",
@@ -911,7 +910,7 @@ var zy64guaData = [
             "密云不雨，自我西郊。公弋取彼在穴",
             "弗遇过之，飞鸟离之，凶，是谓灾眚"
         ],
-        img: "static/images/xiaoguo.png"
+        img: "static/images/xiaoguo.jpg"
     },
 
     {
@@ -926,7 +925,7 @@ var zy64guaData = [
             "东邻杀牛，不如西邻之禴祭，实受其福",
             "濡其首，厉"
         ],
-        img: "static/images/jiji.png"
+        img: "static/images/jiji.jpg"
     },
     {
         name: "未济",
@@ -940,6 +939,6 @@ var zy64guaData = [
             "贞吉，无悔。君子之光，有孚，吉",
             "有孚于饮酒，无咎。濡其首，有孚失是"
         ],
-        img: "static/images/weiji.png"
+        img: "static/images/weiji.jpg"
     }
 ]

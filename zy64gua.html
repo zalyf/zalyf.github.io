@@ -1,28 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <title>周易64卦</title>
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">        
         <link rel="icon" href="./static/images/logo.png" type="image/x-icon" />
-
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./static/css/site.css">
         <link rel="stylesheet" href="./static/css/yi.css">
+        <link rel="stylesheet" href="./static/css/effects.css">
+        <style>
+            body {
+                padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+            }
+            .zy64-header .title {
+                font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+                letter-spacing: 0.2em;
+            }
+            .gua64 {
+                background: rgba(255, 255, 255, 0.78);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+            }
+            .name64 {
+                font-family: var(--font-brush);
+                letter-spacing: 0.08em;
+            }
+        </style>
     </head>
     <body>
-        <div style="padding:12px;display:flex;justify-content:space-between;align-items:center;">
+        <header class="zy64-header">
             <div><a href="index.html" class="meihua-btn">← 返回</a></div>
-            <div style="font-size:18px;font-weight:700;">周易64卦</div>
-            <div></div>
-        </div>
+            <div class="title">周易64卦</div>
+            <div style="min-width:64px;"></div>
+        </header>
 
-        <!-- include the trigram area so yi.js can safely render xt8gua -->
-        <!-- <div id="xt8gua"></div> -->
-
-        <!-- container for the 64 gua -->
         <div id="zy64gua"></div>
 
-
-        
-
+        <script src="./static/js/site.js"></script>
+        <script src="./static/js/effects.js"></script>
         <script src="./static/js/yi.js"></script>
     </body>
 </html>
